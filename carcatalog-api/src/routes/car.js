@@ -1,5 +1,6 @@
 import express from 'express'
 import Car from '../models/car'
+import Engine from '../models/engine'
 
 var router = express.Router()
 
@@ -21,8 +22,10 @@ router.route('/cars')
         var car = new Car()
         car.name = req.body.name
         car.manufacture = req.body.manufacture
-        car.powerPS = req.body.powerPS
-        car.powerKW = req.body.powerKW
+        car.engine = {
+            powerPS: req.body.powerPS,
+            powerKW: req.body.powerKW
+        }
         car.shape = req.body.shape
         car.hsn = req.body.hsn
         car.tsn = req.body.tsn
@@ -52,8 +55,8 @@ router.route('/cars/:carId')
 
             car.name = req.body.name
             car.manufacture = req.body.manufacture
-            car.powerPS = req.body.powerPS
-            car.powerKW = req.body.powerKW
+            car.engine.powerPS = req.body.powerPS
+            car.engine.powerKW = req.body.powerKW
             car.shape = req.body.shape
             car.hsn = req.body.hsn
             car.tsn = req.body.tsn

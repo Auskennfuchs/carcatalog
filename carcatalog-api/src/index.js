@@ -10,7 +10,6 @@ app.use(bodyParser.json())
 
 mongoose.connect('mongodb://localhost/carcatalog')
 
-
 app.use('/api', CarRoutes)
 
 app.get('/*', (req, res) => {
