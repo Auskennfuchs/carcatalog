@@ -7,23 +7,26 @@ Car Catalog using ReactJS, Axios
 - yarn installed
 
 ## Installation
-`cd carcatalog-api
-
+```
+cd carcatalog-api
 yarn install
-`
+```
 
-`cd carcatalog-react
-
+```
+cd carcatalog-react
 yarn install
-`
+```
+
 ## Running the application
-`cd carcatalog-api
+```
+cd carcatalog-api
+yarn start
+```
 
-yarn start`
-
-`cd carcatalog-react
-
-yarn start`
+```
+cd carcatalog-react
+yarn start
+```
 
 browser should open
 
