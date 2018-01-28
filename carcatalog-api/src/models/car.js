@@ -1,15 +1,35 @@
 import mongoose from 'mongoose'
 import Engine from './engine'
 
-var shapes = ['limousine', 'sedan', 'cabrio', 'pickup', 'van', 'bus']
+var vehicleTypes = ['car','truck']
+var vehicleShapes = ['limousine', 'sedan', 'cabrio', 'pickup', 'van', 'bus']
 
 var CarSchema = new mongoose.Schema({
-    name: String,
+    type: {type: String, enum: vehicleTypes, required: true},
+    name: {type: String, maxLength: 50, required: true},
     manufacture: String,
-    shape: { type: String, enum: shapes },
-    hsn: String,
-    tsn: String,
-    engine: Engine
+    series: String,
+    model: String,
+    shape: { type: String, enum: vehicleShapes },
+    codes: {
+        manufacture: String,
+        hsn: String,
+        tsn: String,
+        ets: String,
+        dat: String,
+        afb: String,
+    },
+    engine: Engine,
+    basePrice: Number,
+    constructionTime: {
+        from: Date,
+        to: Date,
+    },
+    insurance: {
+        liability: Number, 
+        fullCover: Number,
+        partialCover: Number,
+    },    
 })
 
 export default mongoose.model("Car", CarSchema)

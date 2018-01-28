@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import { Table, Button } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { normalize } from "normalizr"
 import { fetchAll } from '../../actions/edit'
-import Header from '../header'
+import { CarListSchema } from '../../model/gridcar'
+import AppTemplate from '../apptemplate'
 
-const CarListRow = ({ car, history }) => (
-    <Table.Row key={car._id} onClick={() => { history.push("/cars/" + car._id) }}>
+const CarListRow = ({ car, onRowClick }) => (
+    <Table.Row key={car._id} onClick={() => onRowClick(car._id)} >
         <Table.Cell>
             {car.name}
         </Table.Cell>
@@ -17,25 +19,42 @@ const CarListRow = ({ car, history }) => (
             {car.hsn}/{car.tsn}
         </Table.Cell>
         <Table.Cell>
-            {car.engine.powerPS}
         </Table.Cell>
     </Table.Row>
 )
 
+CarListRow.propTypes = {
+    onRowClick: PropTypes.func.isRequired,
+    car: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        manufacture: PropTypes.string.isRequired,
+        hsn: PropTypes.string.isRequired,
+        tsn: PropTypes.string.isRequired,
+        engine: PropTypes.shape({
+            powerPS: PropTypes.number.isRequired
+        }).isRequired
+    }).isRequired
+}
+
 class ViewCarListPage extends Component {
     state = {
-        cars: []
+        cars: {}
     }
 
     componentDidMount() {
         this.searchCars.bind(this)
     }
 
-    searchCars() {
+    onRowClick = (id) => {
+        this.props.history.push("/cars/" + id)
+    }
+
+    searchCars = () => {
         this.props.fetchCars()
             .then(cars => {
                 this.setState({
-                    cars
+                    cars: normalize(cars.cars, CarListSchema).entities.cars
                 })
             })
     }
@@ -43,9 +62,8 @@ class ViewCarListPage extends Component {
     render() {
         const { cars } = this.state
         return (
-            <div>
-                <Header/>
-                <div className="ui main text container">
+            <AppTemplate>
+                <div className="ui main text">
                     <h1>Fahrzeuge</h1>
                     <Table celled selectable>
                         <Table.Header>
@@ -57,16 +75,14 @@ class ViewCarListPage extends Component {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {cars.length > 0 &&
-                                cars.map(car => (
-                                    <CarListRow car={car} key={car._id} history={this.props.history} />
-                                ))
-                            }
+                            {Object.keys(cars).map((id) => (
+                                <CarListRow car={cars[id]} key={id} onRowClick={this.onRowClick} />
+                            ))}
                         </Table.Body>
                     </Table>
                     <Button onClick={() => this.searchCars()}>Suchen</Button>
                 </div>
-            </div>
+            </AppTemplate>
         );
     }
 }

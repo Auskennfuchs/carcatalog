@@ -15,60 +15,42 @@ router.route('/cars')
             if (err) {
                 res.send(err)
             }
-            res.json(cars)
+            res.json({ cars })
         })
     })
     .post((req, res) => {
-        var car = new Car()
-        car.name = req.body.name
-        car.manufacture = req.body.manufacture
-        car.engine = {
-            powerPS: req.body.powerPS,
-            powerKW: req.body.powerKW
-        }
-        car.shape = req.body.shape
-        car.hsn = req.body.hsn
-        car.tsn = req.body.tsn
-
-        car.save((err) => {
+        var car = new Car(req.body)
+        car.save((err, car) => {
             if (err) {
-                res.send(err)
+                res.status(500).jsonp({ errors: { global: err } })
             }
-            res.json({ message: "Car created" })
+            res.status(200).jsonp(car)
         })
     })
 
 router.route('/cars/:carId')
     .get((req, res) => {
         Car.findById(req.params.carId, (err, car) => {
-            if (err) {
-                res.send(err)
+            if (err || car === null) {
+                res.status(404).json({ errors: { global: "car not found" } })
+            } else {
+                res.json(car)
             }
-            res.json(car)
         })
     })
     .put((req, res) => {
         Car.findById(req.params.carId, (err, car) => {
             if (err) {
-                res.send(err)
+                res.status(404).jsonp({ errors: { global: err } })
             }
-
-            car.name = req.body.name
-            car.manufacture = req.body.manufacture
-            car.engine.powerPS = req.body.powerPS
-            car.engine.powerKW = req.body.powerKW
-            car.shape = req.body.shape
-            car.hsn = req.body.hsn
-            car.tsn = req.body.tsn
-
-            car.save((err) => {
+            Object.assign(car, req.body)
+            car.save((err, car) => {
                 if (err) {
-                    res.send(err)
+                    res.status(500).jsonp({ errors: { global: err } })
                 }
-                res.json({ message: "Car updated" })
+                res.status(200).jsonp(car)
             })
         })
     })
-
 
 export default router

@@ -9,11 +9,15 @@ import LoginForm from '../forms/login'
 import { loggedIn } from '../../actions/login'
 
 class LoginPage extends Component {
-
-    submit = (data) => {
-        this.props.login(data).then(() => this.props.history.push("/cars"))
-        .catch(()=>{})
+    componentWillMount() {
+        if (this.props.isAuthenticated) {
+            this.props.history.push("/cars")
+        }
     }
+
+    submit = (data) => (
+        this.props.login(data).then(() => this.props.history.push("/cars"))
+    )
 
     render() {
         return (
@@ -49,7 +53,8 @@ LoginPage.propTypes = {
     login: PropTypes.func.isRequired,
     history: PropTypes.shape({
         push: PropTypes.func.isRequired
-    }).isRequired
+    }).isRequired,
+    isAuthenticated: PropTypes.bool.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => ({
@@ -57,8 +62,16 @@ const mapDispatchToProps = (dispatch) => ({
         if (credentials.loginId === "123") {
             return Promise.resolve(dispatch(loggedIn({ name: "icke", email: "hier@da.de" })))
         }
-        return Promise.reject("credentials invalid")
+        return Promise.reject({
+            global: "credentials invalid"
+        })
     }
 })
 
-export default connect(null, mapDispatchToProps)(LoginPage)
+const mapStateToProps = ({
+    user
+ }) => ({
+        isAuthenticated: !!user.name,
+    });
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

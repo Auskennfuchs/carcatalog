@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 import CarRoutes from './routes/car'
+import SchemaRoutes from './routes/schema'
 
 var app = express()
 app.use(bodyParser.json())
@@ -11,6 +12,8 @@ app.use(bodyParser.json())
 mongoose.connect('mongodb://localhost/carcatalog')
 
 app.use('/api', CarRoutes)
+
+app.use('/schema', SchemaRoutes)
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import CreateCarForm from '../forms/editcar'
 import { create } from '../../actions/edit'
-import Header from '../header'
+import Apptemplate from '../apptemplate';
 
 class CreateCarPage extends Component {
 
@@ -13,13 +13,12 @@ class CreateCarPage extends Component {
 
     render() {
         return (
-            <div>
-                <Header />
-                <div className="ui main text container">
+            <Apptemplate>
+                <div className="ui main text">
                     <h1>Fahrzeug hinzufügen</h1>
                     <CreateCarForm submit={this.create} />
                 </div>
-            </div>
+            </Apptemplate>
         )
     }
 }
