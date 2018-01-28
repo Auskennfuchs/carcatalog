@@ -9,8 +9,19 @@ const fieldNames = {
     "manufacture": "Hersteller",
     "series": "Reihe",
     "model": "Modell",
+    "codes.manufacture": "Hersteller-Code",
+    "codes.kba.hsn": "KBA-Code HSN",
+    "codes.kba.tsn": "TSN",
+    "codes.ets": "ETS-Code",
+    "codes.dat": "DAT-Code",
+    "codes.afb": "afb-Code",
+    "basePrice": "Preisempfehlung",
+    "constructionTime.from": "Bauzeit von",
+    "constructionTime.to": "bis",
+    "insurance.liability": "Haftpflichtklasse",
+    "insurance.fullCover": "Vollkaskoklasse",
+    "insurance.partialCover": "Teilkaskoklasse",
     "shape": "Karosserieform",
-    "codes.manufacture": "Herstellercode",
     "constructionTime.from": "Bauzeitraum von",
     "constructionTime.to": "Bauzeitraum bis",
     "basePrice": "Preisempfehlung",
@@ -21,7 +32,30 @@ const fieldNames = {
     "engine.cylinder": "Zylinderanordnung/-zahl",
     "engine.capacity": "Hubraum",
     "engine.drive": "Antrieb",
+    "engine.gears": "Gänge",
+    "engine.gearType": "Getriebe",
+    "engine.fuel": "Kraftstoff",
+    "engine.consumption.city": "Verbrauch Stadt",
+    "engine.consumption.country": "Land",
+    "engine.consumption.combined": "kombiniert",
     "engine.maxSpeed": "Höchstgeschwindigkeit",
+    "engine.acc0to100": "Beschleunigung 0-100 km/h",
+    "engine.acc80to100": "Elastizität 80-100 km/h",
+    "engine.acc80to120": "Elastizität 80-120 km/h",
+    "engine.torque.torque": "Drehmoment Nm",
+    "engine.torque.rpm": "Umdrehnungen/min",
+    "engine.noise.still": "Standgeräusch dbA",
+    "engine.noise.drive": "Fahrgeräusch dbA",
+    "engine.range": "Reichweite",
+    "engine.co2Emission": "CO2-Emmision",
+    "body.shape": "Aufbau",
+    "body.doors": "Türen",
+    "body.backType": "Heckart",
+    "body.seats": "Sitze",
+    "body.tire.front": "Reifen vorne",
+    "body.tire.back": "Reifen hinten",
+    "body.weight.total": "zul. Gesamtgewicht",
+    "body.weight.self": "Eigengewicht",
 }
 
 const grouping = {
@@ -35,7 +69,13 @@ const grouping = {
                 ]
             },
             "series", "basePrice",
-            "engine.cylinder", "engine.capacity",
+            "model", "",
+            "codes.manufacture", "codes.afb",
+            {
+                "kba": ["codes.kba.hsn", "codes.kba.tsn"]
+            }, "insurance.liability",
+            "codes.ets", "insurance.partialCover",
+            "codes.dat", "insurance.fullCover",
         ]
     },
     "engine": {
@@ -47,7 +87,31 @@ const grouping = {
                     "engine.power.ps", "engine.power.kw", "engine.power.rpm"
                 ]
             },
-            "engine.drive", "engine.maxSpeed"
+            "engine.cylinder", "engine.capacity",
+            "engine.drive", "engine.maxSpeed",
+            "engine.gears", {
+                "torque": [
+                    "engine.torque.torque", "engine.torque.rpm"
+                ]
+            },
+            "engine.gearType", "engine.acc0to100",
+            "engine.fuel", "engine.acc80to100",
+            {
+                "consumption": [
+                    "engine.consumption.city", "engine.consumption.country", "engine.consumption.combined"
+                ]
+            }, "engine.acc80to120",
+            "engine.range", "engine.noise.still",
+            "engine.co2Emission", "engine.noise.drive",
+        ]
+    },
+    "body": {
+        name: "Karosseriedaten",
+        fields: [
+            "body.shape", "body.doors",
+            "body.backType", "body.seats",
+            "body.tire.front", "body.weight.total",
+            "body.tire.back", "body.weight.self",
         ]
     }
 }

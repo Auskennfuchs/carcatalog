@@ -9,6 +9,10 @@ function findField(fields, name) {
 
 export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
     const field = findField(fields, fieldName)
+    if (!field) {
+        return <Grid.Column />
+
+    }
     const parts = fieldName.split('.')
     let value = data[parts[0]]
     parts.shift()
@@ -50,7 +54,7 @@ export const ColumnRow = ({ groupFields, fields, data, onChange }) => (
             if (typeof field === 'object') {
                 const res = field[Object.keys(field)[0]]
                 const columns = res.length
-                return <Grid.Column>
+                return <Grid.Column key={index}>
                     <Grid className="subGrid" columns={columns}>
                         <ColumnRow groupFields={res} data={data} fields={fields} onChange={onChange} />
                     </Grid>

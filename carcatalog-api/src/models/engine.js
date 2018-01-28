@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 var engineTypes = ['otto', 'diesel']
 var driveTypes = ['front', 'back', 'awd_permanent']
 var fuelTypes = ['petrol95', 'petrol98', 'diesel']
+var gearTypes = ['tiptronic', 'manual', 'dsg']
 
 var EngineSchema = {
     type: { type: String, enum: engineTypes },
@@ -15,8 +16,9 @@ var EngineSchema = {
     capacity: Number,
     drive: { type: String, enum: driveTypes },
     gears: Number,
+    gearType: { type: String, enum: gearTypes },
     fuel: { type: String, enum: fuelTypes },
-    consumptions: {
+    consumption: {
         city: Number,
         country: Number,
         combined: Number,
@@ -30,9 +32,11 @@ var EngineSchema = {
         rpm: Number,
     },
     noise: {
-        stand: Number,
+        still: Number,
         drive: Number,
-    },    
+    },
+    range: Number,
+    co2Emission: Number,
 }
 
 export default EngineSchema

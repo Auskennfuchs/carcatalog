@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Button, Form } from 'semantic-ui-react'
 
 import Apptemplate from '../apptemplate'
 import { getCar, save } from '../../actions/edit'
@@ -11,7 +10,7 @@ import PageMessage from '../messages/PageMessage';
 import CarApi from './../../api'
 import { schemaLoad } from './../../actions/schema'
 
-import { Block } from '../block'
+import EditCarForm from './../forms/editcar'
 
 class ViewCarDetailsPage extends Component {
     state = {
@@ -38,29 +37,12 @@ class ViewCarDetailsPage extends Component {
             })
     }
 
-    onChange = (e, target) => {
-        const car = { ...this.state.car }
-        const parts = target.name.split('.')
-        let schemaPointer = car
-        for (let i = 0; i < parts.length - 1; i += 1) {
-            const elem = parts[i]
-            if (!schemaPointer[elem]) {
-                schemaPointer[elem] = {}
-            }
-            schemaPointer = schemaPointer[elem]
-        }
-        schemaPointer[parts[parts.length - 1]] = target.value
-        this.setState({
-            car
-        })
-    }
-
-    onSubmit = () => {
-        this.props.saveCar(this.state.car)
+    onSubmit = (carData) => {
+        this.props.saveCar(carData)
     }
 
     render() {
-        const { car, loading, success, errors } = this.state
+        const { car, loading, success, errors } = this.state        
         const { schemes } = this.props
         return (
             <Apptemplate>
@@ -69,6 +51,14 @@ class ViewCarDetailsPage extends Component {
                     <div>Loading</div>
                 }
                 {!loading && success &&
+                    <EditCarForm schema={schemes} car={car} submit={this.onSubmit} />
+                }
+            </Apptemplate>
+        )
+    }
+}
+
+/*
                     <Form onSubmit={this.onSubmit}>
                         <h1>{car.name}</h1>
                         {Object.keys(schemes.grouping).map(key =>
@@ -81,12 +71,7 @@ class ViewCarDetailsPage extends Component {
                         )}
                         <Button primary>Save</Button>
                     </Form>
-                }
-            </Apptemplate>
-        )
-    }
-}
-
+*/
 ViewCarDetailsPage.propTypes = {
     match: PropTypes.shape({
         params: PropTypes.shape({

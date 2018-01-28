@@ -3,6 +3,22 @@ import Engine from './engine'
 
 var vehicleTypes = ['car','truck']
 var vehicleShapes = ['limousine', 'sedan', 'cabrio', 'pickup', 'van', 'bus']
+var backTypes = ['hothatch','limousine']
+
+var Body = {
+    shape: { type: String, enum: vehicleShapes },
+    doors: Number,
+    backType: {type: String, enum: backTypes},
+    seats: Number,
+    tire : {
+        front: String,
+        back: String,
+    },
+    weight: {
+        total: Number,
+        self: Number,
+    },    
+}
 
 var CarSchema = new mongoose.Schema({
     type: {type: String, enum: vehicleTypes, required: true},
@@ -10,16 +26,16 @@ var CarSchema = new mongoose.Schema({
     manufacture: String,
     series: String,
     model: String,
-    shape: { type: String, enum: vehicleShapes },
     codes: {
         manufacture: String,
-        hsn: String,
-        tsn: String,
+        kba: {
+            hsn: String,
+            tsn: String,
+        },
         ets: String,
         dat: String,
         afb: String,
     },
-    engine: Engine,
     basePrice: Number,
     constructionTime: {
         from: Date,
@@ -30,6 +46,8 @@ var CarSchema = new mongoose.Schema({
         fullCover: Number,
         partialCover: Number,
     },    
+    engine: Engine,
+    body: Body
 })
 
 export default mongoose.model("Car", CarSchema)
