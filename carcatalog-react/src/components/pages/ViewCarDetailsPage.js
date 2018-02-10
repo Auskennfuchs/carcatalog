@@ -23,9 +23,13 @@ class ViewCarDetailsPage extends Component {
 
     componentDidMount() {
         //        if (!this.props.schemes) {
-        this.props.loadSchema().then(carSchema =>
-            this.setState({ schemes: carSchema.schema })
-        )
+        this.props.loadSchema()
+            .then(carSchema =>
+                this.setState({ schemes: carSchema.schema })
+            )
+            .catch(err => {
+                this.setState({ errors: { global: "error loading schema" } })
+            })
         //        }
         const { id } = this.props.match.params
         this.props.getCar(id)
@@ -40,7 +44,7 @@ class ViewCarDetailsPage extends Component {
     onSubmit = (carData) => {
         this.props.saveCar(carData)
             .catch(err => {
-                console.log("error"+err)
+                console.log("error" + err)
             })
     }
 
@@ -49,7 +53,7 @@ class ViewCarDetailsPage extends Component {
         const { schemes } = this.props
         return (
             <Apptemplate>
-                {errors.global && <PageMessage text={errors.global} />}
+                {!!errors.global && errors.global && <PageMessage text={errors.global} />}
                 {loading &&
                     <div>Loading</div>
                 }

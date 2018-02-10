@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Icon } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import LabelInput from './LabelInput'
 import LabelSelect from './LabelSelect'
 import LabelDate from './LabelDate'
@@ -33,7 +33,12 @@ export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
                 text: enumEntry,
                 key: enumEntry,
             })
-        })
+        })    
+        if (field.enumTexts !== null) {
+            options.forEach((_, index) => {
+                options[index].text = field.enumTexts[options[index].value] || options[index].text 
+            })
+        }
     }
     if (field.type === "Date") {
         fieldType = "date"

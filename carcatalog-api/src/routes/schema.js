@@ -42,10 +42,10 @@ const fieldNames = {
     "engine.acc0to100": "Beschleunigung 0-100 km/h",
     "engine.acc80to100": "Elastizität 80-100 km/h",
     "engine.acc80to120": "Elastizität 80-120 km/h",
-    "engine.torque.torque": "Drehmoment Nm",
-    "engine.torque.rpm": "Umdrehnungen/min",
-    "engine.noise.still": "Standgeräusch dbA",
-    "engine.noise.drive": "Fahrgeräusch dbA",
+    "engine.torque.torque": "Drehmoment",
+    "engine.torque.rpm": "Umdrehungen/min",
+    "engine.noise.still": "Standgeräusch",
+    "engine.noise.drive": "Fahrgeräusch",
     "engine.range": "Reichweite",
     "engine.co2Emission": "CO2-Emmision",
     "body.shape": "Aufbau",
@@ -56,6 +56,14 @@ const fieldNames = {
     "body.tire.back": "Reifen hinten",
     "body.weight.total": "zul. Gesamtgewicht",
     "body.weight.self": "Eigengewicht",
+}
+
+const enumTexts = {
+    "type": { car: "PKW", truck: "LKW" },
+    "engine.type": { otto: "Otto", diesel: "Diesel" },
+    "engine.drive": { front: "Frontantrieb", back: "Heckantrieb", awd_permanent: "Allrad permanent" },
+    "engine.gearType": { tiptronic: "Tiptronic", manual: "Manuell", dsg: "DSG" },
+    "engine.fuel": { petrol98: "ROZ 98", petrol95: "ROZ 95", diesel: "Diesel" },
 }
 
 const grouping = {
@@ -125,6 +133,7 @@ function mapField(fields, key) {
     const field = fields[key]
     let fieldType = field.instance
     let unit = null
+    let fieldEnumTexts = null
     if (field.options.fractions !== undefined) {
         if (field.options.fractions == 0) {
             fieldType = "Integer"
@@ -133,12 +142,16 @@ function mapField(fields, key) {
     if (field.options.unit !== undefined) {
         unit = field.options.unit
     }
+    if (Object.keys(enumTexts).find(et => et === field.path)) {
+        fieldEnumTexts = enumTexts[field.path]
+    }
     return {
         field: field.path,
         label: fieldNames[field.path],
         required: !!field.isRequired,
         type: fieldType,
-        unit: unit,
+        unit,
+        enumTexts: fieldEnumTexts,
         enumValues: (!!field.enumValues && field.enumValues.length > 0 ? field.enumValues : null),
     }
 }

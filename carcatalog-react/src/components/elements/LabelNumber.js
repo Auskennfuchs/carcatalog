@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Input, Icon } from 'semantic-ui-react'
+import { Input } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import 'moment/locale/de'
@@ -45,7 +45,6 @@ class LabelNumber extends Component {
     }
 
     onBlur = (e) => {
-        console.log(e.target)
         const targetValue = this.parseLocaleNumber(this.state.numberValue)
         this.setState({ numberValue: this.state.formatter.format(targetValue) })
         e.target.value = targetValue
@@ -76,11 +75,16 @@ class LabelNumber extends Component {
     render() {
         const { label, name, unit } = this.props
         const { numberValue } = this.state
+        let labelPosition = null
+        if (unit !== null) {
+            labelPosition = "right"
+        }
+
         return (
             <div className="labelText">
                 <span className="label">{label}</span>
                 <Input id={name} name={name} value={numberValue || ''} fluid onChange={this.onChangeValue} type="text"
-                    onKeyPress={this.onKeyPress} onBlur={this.onBlur} label={unit}  labelPosition={!!unit && "right"}/>
+                    onKeyPress={this.onKeyPress} onBlur={this.onBlur} label={unit} labelPosition={labelPosition} />
             </div>
         )
     }

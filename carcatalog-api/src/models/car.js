@@ -36,7 +36,7 @@ var CarSchema = new mongoose.Schema({
         dat: String,
         afb: String,
     },
-    basePrice: { type: Number, fractions: 2 },
+    basePrice: { type: Number, fractions: 2, unit:"EUR" },
     constructionTime: {
         from: Date,
         to: Date,
