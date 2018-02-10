@@ -1,7 +1,9 @@
 import React from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Icon } from 'semantic-ui-react'
 import LabelInput from './LabelInput'
 import LabelSelect from './LabelSelect'
+import LabelDate from './LabelDate'
+import LabelNumber from './LabelNumber'
 
 function findField(fields, name) {
     return fields.find(f => f.field === name);
@@ -33,6 +35,25 @@ export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
             })
         })
     }
+    if (field.type === "Date") {
+        fieldType = "date"
+    }
+    let fraction = 0
+    let unit = null
+    if (field.type === "Number") {
+        fieldType = "number"
+        fraction = 2
+        if (!!field.unit) {
+            unit = <span className="ui">{field.unit}</span>
+        }
+    }
+    if (field.type === "Integer") {
+        fieldType = "number"
+        fraction = 0
+        if (!!field.unit) {
+            unit = <span className="ui">{field.unit}</span>
+        }
+    }
     return (
         <Grid.Column>
             {!!field && fieldType === "text" &&
@@ -40,6 +61,12 @@ export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
             }
             {!!field && fieldType === "select" &&
                 < LabelSelect name={fieldName} value={value} label={field.label} options={options} onChange={onChange} />
+            }
+            {!!field && fieldType === "date" &&
+                < LabelDate name={fieldName} value={value} label={field.label} onChange={onChange} />
+            }
+            {!!field && fieldType === "number" &&
+                < LabelNumber name={fieldName} value={value} label={field.label} onChange={onChange} fraction={fraction} unit={unit} />
             }
         </Grid.Column>
     )

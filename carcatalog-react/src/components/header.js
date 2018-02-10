@@ -24,21 +24,17 @@ class Header extends Component {
 
     render() {
         const { activeItem } = this.state;
-        return (
-            <div >
-                <Menu icon vertical fluid>
-                    <Menu.Item onClick={this.onRoute} destination="/cars" active={activeItem === "/cars"}>
-                        <Icon name="car" size="large"/>
-                    </Menu.Item>
-                    <Menu.Item onClick={this.onRoute} destination="/cars/create" active={activeItem === "/cars/create"}>
-                        <Icon name="user circle outline" size="large"/>
-                    </Menu.Item>
-                    <Menu.Item onClick={this.onLogout}>
-                        <Icon name="sign out" size="large"/>
-                    </Menu.Item>
-                </Menu>
-            </div>
-        );
+        return [
+            <Menu.Item onClick={this.onRoute} destination="/cars" active={activeItem === "/cars"} key="car">
+                <Icon name="car" size="large" />
+            </Menu.Item>,
+            <Menu.Item onClick={this.onRoute} destination="/cars/create" active={activeItem === "/cars/create"} key="createcar">
+                <Icon name="user circle outline" size="large" />
+            </Menu.Item>,
+            <Menu.Item onClick={this.onLogout} key="signout">
+                <Icon name="sign out" size="large" />
+            </Menu.Item>
+        ]
     }
 }
 

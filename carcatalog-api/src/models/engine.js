@@ -8,14 +8,14 @@ var gearTypes = ['tiptronic', 'manual', 'dsg']
 var EngineSchema = {
     type: { type: String, enum: engineTypes },
     power: {
-        ps: Number,
-        kw: Number,
-        rpm: Number
+        ps: { type: Number, fractions: 0, unit: "PS" },
+        kw: { type: Number, fractions: 0, unit: "KW" },
+        rpm: { type: Number, fractions: 0, unit: "RPM" },
     },
     cylinder: String,
-    capacity: Number,
+    capacity: { type: Number, fractions: 0, unit: "cm³" },
     drive: { type: String, enum: driveTypes },
-    gears: Number,
+    gears: { type: Number, fractions: 0 },
     gearType: { type: String, enum: gearTypes },
     fuel: { type: String, enum: fuelTypes },
     consumption: {
@@ -23,20 +23,20 @@ var EngineSchema = {
         country: Number,
         combined: Number,
     },
-    maxSpeed: Number,
-    acc0to100: Number,
-    acc80to100: Number,
-    acc80to120: Number,
+    maxSpeed: { type: Number, fractions: 0 },
+    acc0to100: { type: Number, unit:"s" },
+    acc80to100: { type: Number, unit:"s" },
+    acc80to120: { type: Number, unit:"s" },
     torque: {
-        torque: Number,
-        rpm: Number,
+        torque: { type: Number, fractions: 0 },
+        rpm: { type: Number, fractions: 0 },
     },
     noise: {
         still: Number,
         drive: Number,
     },
-    range: Number,
-    co2Emission: Number,
+    range: { type: Number, fractions: 0 },
+    co2Emission: { type: Number, fractions: 0 },
 }
 
 export default EngineSchema

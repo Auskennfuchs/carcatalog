@@ -22,7 +22,7 @@ router.route('/cars')
         var car = new Car(req.body)
         car.save((err, car) => {
             if (err) {
-                res.status(500).jsonp({ errors: { global: err } })
+                res.status(500).jsonp({ errors: { global: err.message } })
             }
             res.status(200).jsonp(car)
         })

@@ -7,18 +7,22 @@ import { fetchAll } from '../../actions/edit'
 import { CarListSchema } from '../../model/gridcar'
 import AppTemplate from '../apptemplate'
 
+const get = (p, o) =>
+    p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o)
+
 const CarListRow = ({ car, onRowClick }) => (
     <Table.Row key={car._id} onClick={() => onRowClick(car._id)} >
         <Table.Cell>
-            {car.name}
+            {get(['name'], car)}
         </Table.Cell>
         <Table.Cell>
-            {car.manufacture}
+            {get(['manufacture'], car)}
         </Table.Cell>
         <Table.Cell>
-            {car.hsn}/{car.tsn}
+            {get(['codes', 'kba', 'hsn'], car)}/{get(['codes', 'kba', 'tsn'], car)}
         </Table.Cell>
         <Table.Cell>
+            {get(['engine', 'power', 'ps'], car)}
         </Table.Cell>
     </Table.Row>
 )
@@ -29,12 +33,27 @@ CarListRow.propTypes = {
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         manufacture: PropTypes.string.isRequired,
-        hsn: PropTypes.string.isRequired,
-        tsn: PropTypes.string.isRequired,
+        codes: PropTypes.shape({
+            kba: PropTypes.shape({
+                hsn: PropTypes.string.isRequired,
+                tsn: PropTypes.string.isRequired,
+            }),
+        }),
         engine: PropTypes.shape({
-            powerPS: PropTypes.number.isRequired
+            power: PropTypes.shape({
+                PS: PropTypes.number.isRequired
+            }),
         }).isRequired
     }).isRequired
+}
+
+CarListRow.defaultProps = {
+    car: {
+        codes: {
+            hsn: '',
+            tsn: '',
+        }
+    }
 }
 
 class ViewCarListPage extends Component {
@@ -65,7 +84,7 @@ class ViewCarListPage extends Component {
             <AppTemplate>
                 <div className="ui main text">
                     <h1>Fahrzeuge</h1>
-                    <Table celled selectable>
+                    <Table celled selectable size="small">
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell collapsing>Name</Table.HeaderCell>

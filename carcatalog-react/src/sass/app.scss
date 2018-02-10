@@ -25,8 +25,6 @@ h6 {
     display: table;
 }
 
-.main {}
-
 .appContent {
     height: 100%;
     margin: 0;
@@ -34,30 +32,11 @@ h6 {
     display: table-row;
 }
 
-.mainMenu {
-    background-color: #272A34;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    width: 10rem!important;
-    display: table-cell;
-    .item {
-        color: #b5b2af;
-        display: block;
-        padding: 0.8em 0.5em;
-        font-size: 1.2rem;
-        cursor: pointer;
-        &.active {
-            color: #fff;
-        }
-    }
-}
-
 .mainContent {
-    display: table-cell;
-    padding: 1.5em;
-    vertical-align: top;
+    display: block;
+    padding: 0;
     color: #665f5f;
+    height: 100%;
 }
 
 .labelText {
@@ -86,7 +65,7 @@ h6 {
         padding-bottom: 1.5em;
     }
     .blockHeader {
-        font-size: 3em;
+        font-size: 1.8em;
         font-weight: lighter;
     }
     .headerRow {
@@ -101,6 +80,89 @@ h6 {
         }
         .column {
             padding-bottom: 0;
+        }
+    }
+}
+
+
+.ui.visible[class*="very thin"].left.sidebar~.fixed, .ui.visible[class*="very thin"].left.sidebar~.pusher,
+.ui.visible[class*="thin"].left.sidebar~.fixed, .ui.visible[class*="thin"].left.sidebar~.pusher {
+    padding-right: 60px;
+}
+
+/*.ui.visible.thin.left.sidebar~.fixed, .ui.visible.thin.left.sidebar~.pusher {
+    -webkit-transform: translate3d(60px,0,0);
+    transform: translate3d(60px,0,0)    
+}*/
+
+.pushable>.pusher {
+    background-color: #f3f3f3;
+}
+
+.calendar {
+    display: inline-block;
+    /* iOS Safari */
+    -webkit-touch-callout: none;
+    /* Safari */
+    -webkit-user-select: none;
+    /* Konqueror HTML */
+    -khtml-user-select: none;
+    /* Firefox */
+    -moz-user-select: none;
+    /* Internet Explorer/Edge */
+    -ms-user-select: none;
+    /* Non-prefixed version, currently */
+    user-select: none;
+
+    .navContainer {
+        padding: 0.4em 0.2em;
+        background-color: #1b1c1d;
+        button {
+            background-color: transparent;
+            border: 0.15em solid #fff;
+            border-radius: 100%;
+            color: #fff;
+            &.ui.icon.button {
+                padding: 0.2em;
+            }
+            i {
+                text-align: center;                
+            }
+        }
+        &:nth-child(first) {
+            float: left;                
+        }
+
+        &:nth-child(last) {
+            float: right;
+        }
+}
+
+    .dayContainer {
+        background-color: #fff;
+        border: 0.1rem solid rgba(34, 36, 38, .15);
+        display: table;
+        border-collapse: separate;
+        border-spacing: 0.2rem;
+        .week {
+            display: table-row
+        }
+        .day {
+            background-color: #fff;
+            border-color: #fff;
+            border-width: 0.4rem;
+            padding: 0.2rem;
+            width: 2rem;
+            height: 2rem;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1rem;
+            line-height: 1rem;
+            cursor: pointer;
+            &:hover {
+                background-color: #e2e3e4;
+            }
         }
     }
 }

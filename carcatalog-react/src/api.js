@@ -3,7 +3,9 @@ import axios from 'axios'
 export default {
     car: {
         create: (cardata) => (
-            axios.post('/api/cars', cardata).then(res => res.data)
+            axios.post('/api/cars', cardata)
+                .then(res => res.data)
+                .catch(err => Promise.reject(err.response.data))
         ),
         save: (cardata) => (
             axios.put('/api/cars/'.concat(cardata._id), cardata).then(res => res.data)

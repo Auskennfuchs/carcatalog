@@ -123,11 +123,22 @@ router.use((req, res, next) => {
 
 function mapField(fields, key) {
     const field = fields[key]
+    let fieldType = field.instance
+    let unit = null
+    if (field.options.fractions !== undefined) {
+        if (field.options.fractions == 0) {
+            fieldType = "Integer"
+        }
+    }
+    if (field.options.unit !== undefined) {
+        unit = field.options.unit
+    }
     return {
         field: field.path,
         label: fieldNames[field.path],
         required: !!field.isRequired,
-        type: field.instance,
+        type: fieldType,
+        unit: unit,
         enumValues: (!!field.enumValues && field.enumValues.length > 0 ? field.enumValues : null),
     }
 }

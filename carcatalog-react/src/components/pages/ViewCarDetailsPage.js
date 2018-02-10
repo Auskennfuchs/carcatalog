@@ -39,10 +39,13 @@ class ViewCarDetailsPage extends Component {
 
     onSubmit = (carData) => {
         this.props.saveCar(carData)
+            .catch(err => {
+                console.log("error"+err)
+            })
     }
 
     render() {
-        const { car, loading, success, errors } = this.state        
+        const { car, loading, success, errors } = this.state
         const { schemes } = this.props
         return (
             <Apptemplate>
@@ -58,20 +61,6 @@ class ViewCarDetailsPage extends Component {
     }
 }
 
-/*
-                    <Form onSubmit={this.onSubmit}>
-                        <h1>{car.name}</h1>
-                        {Object.keys(schemes.grouping).map(key =>
-                            <Block className="blockGrid" key={key}
-                                headerText={schemes.grouping[key].name}
-                                groupFields={schemes.grouping[key].fields}
-                                fields={schemes.schema} data={car}
-                                onChange={this.onChange}
-                            />
-                        )}
-                        <Button primary>Save</Button>
-                    </Form>
-*/
 ViewCarDetailsPage.propTypes = {
     match: PropTypes.shape({
         params: PropTypes.shape({

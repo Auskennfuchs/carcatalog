@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button } from "semantic-ui-react";
 import PropTypes from 'prop-types'
 
-import { Block } from '../block'
+import { Block } from '../elements/block'
 
 class EditCarForm extends Component {
 
