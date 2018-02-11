@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URL)
 
         app.use('/user', UserRoutes)
 
-        app.get('/*', (req, res) => {
+        app.use('/*', (req, res) => {
             res.sendFile(path.join(__dirname, 'index.html'))
         })
 

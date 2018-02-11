@@ -64,6 +64,8 @@ const enumTexts = {
     "engine.drive": { front: "Frontantrieb", back: "Heckantrieb", awd_permanent: "Allrad permanent" },
     "engine.gearType": { tiptronic: "Tiptronic", manual: "Manuell", dsg: "DSG" },
     "engine.fuel": { petrol98: "ROZ 98", petrol95: "ROZ 95", diesel: "Diesel" },
+    "body.shape": { sedan: "Kombi", limousine: "Limousine", cabrio: "Cabrio", pickup: "Pickup", van: "Van", bus: "Bus" },
+    "body.backType": { hothatch: "Steilheck", limousine: "Limousine" },
 }
 
 const grouping = {
@@ -134,10 +136,12 @@ function mapField(fields, key) {
     let fieldType = field.instance
     let unit = null
     let fieldEnumTexts = null
+    let fractions = 0
     if (field.options.fractions !== undefined) {
+        fractions = field.options.fractions
         if (field.options.fractions == 0) {
             fieldType = "Integer"
-        }
+        } 
     }
     if (field.options.unit !== undefined) {
         unit = field.options.unit
@@ -151,6 +155,7 @@ function mapField(fields, key) {
         required: !!field.isRequired,
         type: fieldType,
         unit,
+        fractions,
         enumTexts: fieldEnumTexts,
         enumValues: (!!field.enumValues && field.enumValues.length > 0 ? field.enumValues : null),
     }

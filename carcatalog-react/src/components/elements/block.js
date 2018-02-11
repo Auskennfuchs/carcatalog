@@ -33,10 +33,10 @@ export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
                 text: enumEntry,
                 key: enumEntry,
             })
-        })    
+        })
         if (field.enumTexts !== null) {
             options.forEach((_, index) => {
-                options[index].text = field.enumTexts[options[index].value] || options[index].text 
+                options[index].text = field.enumTexts[options[index].value] || options[index].text
             })
         }
     }
@@ -47,7 +47,7 @@ export const FieldColumn = ({ fieldName, fields, data, onChange }) => {
     let unit = null
     if (field.type === "Number") {
         fieldType = "number"
-        fraction = 2
+        fraction = !!field.fractions ? field.fractions : 2
         if (!!field.unit) {
             unit = <span className="ui">{field.unit}</span>
         }

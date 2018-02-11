@@ -1,12 +1,28 @@
 import express from 'express'
 import Car from '../models/car'
 import Engine from '../models/engine'
+import jwt from 'jsonwebtoken'
+import path from 'path'
 
 var router = express.Router()
 
 router.use((req, res, next) => {
-    console.log('something is happening')
-    next()
+    const authorization = req.header("authorization")
+    let token
+    if (authorization) {
+        token = authorization.split(" ")[1]
+    }
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                res.sendFile(path.join(__dirname, '/../index.html'))
+            } else {
+                next()
+            }            
+        })
+    } else {
+        next()
+    }
 })
 
 router.route('/cars')

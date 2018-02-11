@@ -10,7 +10,7 @@ class LabelDate extends Component {
         super(props)
         Moment.locale('de')
         this.state = {
-            dateValue: Moment(props.value).format("L")
+            dateValue: props.value !== null ? Moment(props.value).format("L") : ''
         }
     }
 
@@ -18,12 +18,15 @@ class LabelDate extends Component {
         this.setState({
             dateValue: target.value
         })
-        try{
-            target.value = Moment(target.value,"L").toISOString().toString()
-        }catch(e) {
-            target.value=''
+        try {
+            target.value = Moment(target.value, "L").toISOString().toString()
+        } catch (e) {
+            target.value = ''
         }
-        this.props.onChange(e,target)
+        if (target.value == "Invalid date") {
+            target.value = ''
+        }
+        this.props.onChange(e, target)
     }
 
     render() {
@@ -32,8 +35,8 @@ class LabelDate extends Component {
         return (
             <div className="labelText">
                 <span className="label">{label}</span>
-                <Input id={name} name={name} value={dateValue || ''} fluid onChange={this.onChangeValue} type="text" 
-                label={<Button icon="calendar"/>} labelPosition="right"/>
+                <Input id={name} name={name} value={dateValue || ''} fluid onChange={this.onChangeValue} type="text"
+                    label={<Button icon="calendar" />} labelPosition="right" />
             </div>
         )
     }

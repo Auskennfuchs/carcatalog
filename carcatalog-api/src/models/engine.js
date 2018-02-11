@@ -19,9 +19,9 @@ var EngineSchema = {
     gearType: { type: String, enum: gearTypes },
     fuel: { type: String, enum: fuelTypes },
     consumption: {
-        city: { type: Number, unit: "l/100km" },
-        country: { type: Number, unit: "l/100km" },
-        combined: { type: Number, unit: "l/100km" },
+        city: { type: Number, unit: "l/100km", fractions: 1 },
+        country: { type: Number, unit: "l/100km", fractions: 1 },
+        combined: { type: Number, unit: "l/100km", fractions: 1 },
     },
     maxSpeed: { type: Number, fractions: 0, unit: "km/h" },
     acc0to100: { type: Number, unit: "s" },

@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'emoji';
+  src: local("Android Emoji"), local("NotoColorEmoji"), local("NotoColorEmoji.ttf"), local("/system/fonts/NotoColorEmoji.ttf"), local("Noto Color Emoji"), local("Android Emoji"); }
+
 #root,
 .App {
   display: block;
@@ -62,8 +66,10 @@ h6 {
   .blockGrid .subGrid .column {
     padding-bottom: 0; }
 
-.ui.visible[class*="very thin"].left.sidebar ~ .fixed, .ui.visible[class*="very thin"].left.sidebar ~ .pusher,
-.ui.visible[class*="thin"].left.sidebar ~ .fixed, .ui.visible[class*="thin"].left.sidebar ~ .pusher {
+.ui.visible[class*="very thin"].left.sidebar ~ .fixed,
+.ui.visible[class*="very thin"].left.sidebar ~ .pusher,
+.ui.visible[class*="thin"].left.sidebar ~ .fixed,
+.ui.visible[class*="thin"].left.sidebar ~ .pusher {
   padding-right: 60px; }
 
 /*.ui.visible.thin.left.sidebar~.fixed, .ui.visible.thin.left.sidebar~.pusher {
@@ -126,3 +132,9 @@ h6 {
       cursor: pointer; }
       .calendar .dayContainer .day:hover {
         background-color: #e2e3e4; }
+
+.emoji {
+  font-family: 'emoji';
+  font-size: 10em;
+  padding-top: 0.5em;
+  display: inline-block; }
