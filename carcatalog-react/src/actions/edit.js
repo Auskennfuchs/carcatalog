@@ -1,21 +1,21 @@
 import api from '../api'
 
-export const create = (cardata) => () => (
-    api.car.create(cardata)
+export const create = (cardata, token) => () => (
+    api(token).car.create(cardata)
 )
 
-export const save = (cardata) => () => (
-    api.car.save(cardata)
+export const save = (cardata, token) => () => (
+    api(token).car.save(cardata)
 )
 
-export const edit = (cardata) => () => (
-    api.car.create(cardata)
+export const edit = (cardata, token) => () => (
+    api(token).car.create(cardata)
 )
 
-export const fetchAll = () => () => (
-    api.car.fetchAll()
+export const fetchAll = (token) => () => (
+    api(token).car.fetchAll()
 )
 
-export const getCar = (id) => () => {
-    return api.car.get(id)
+export const getCar = (id, token) => () => {
+    return api(token).car.get(id)
 }

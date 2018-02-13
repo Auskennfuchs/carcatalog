@@ -26,7 +26,7 @@ class LoginForm extends Component {
         if (Object.keys(errors).length === 0) {
             this.props.submit(this.state.data)
                 .catch((err) => {
-                    this.setState({ errors: err })
+                    this.setState({ errors: err.errors })
                 })
         }
     }
@@ -44,18 +44,19 @@ class LoginForm extends Component {
 
     render() {
         const { errors } = this.state
+        console.log(errors.errors)
         return (
             <Form onSubmit={this.onSubmit}>
-                {errors.global && <InlineError text={errors.global} />}
+                {!!errors.global && <InlineError text={errors.global} />}
                 <Form.Field>
                     <label htmlFor="loginId">Login</label>
                     <Input icon="user" type="text" id="loginId" name="loginId" onChange={this.onChange} />
-                    {errors.loginId && <InlineError text={errors.loginId} pointer/>}
+                    {!!errors.loginId && <InlineError text={errors.loginId} pointer />}
                 </Form.Field>
                 <Form.Field>
                     <label htmlFor="password">Passwort</label>
                     <Input icon="key" type="password" id="password" name="password" onChange={this.onChange} />
-                    {errors.password && <InlineError text={errors.password} pointer/>}
+                    {!!errors.password && <InlineError text={errors.password} pointer />}
                 </Form.Field>
                 <Button primary floated="right">Login</Button>
             </Form>

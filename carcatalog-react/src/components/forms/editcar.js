@@ -57,7 +57,6 @@ class EditCarForm extends Component {
         const { schema } = this.props
         return (
             <Form onSubmit={this.onSubmit}>
-                <h1>{car.name}</h1>
                 {Object.keys(schema.grouping).map(key =>
                     <Block className="blockGrid" key={key}
                         headerText={schema.grouping[key].name}

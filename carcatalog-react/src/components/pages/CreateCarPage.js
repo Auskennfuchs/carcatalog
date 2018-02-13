@@ -23,13 +23,13 @@ class CreateCarPage extends Component {
 
     componentDidMount() {
         //        if (!this.props.schemes) {
-        this.props.loadSchema().then(carSchema =>
+        this.props.loadSchema(this.props.user.jwt).then(carSchema =>
             this.setState({ schemes: carSchema.schema })
         )
     }
 
     create = (carData) =>
-        this.props.create(carData)
+        this.props.create(carData, this.props.user.jwt)
             .then((car) => {
                 this.props.history.push("/cars/".concat(car._id))
             })
@@ -69,15 +69,15 @@ CreateCarPage.propTypes = {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    create: (carData) => create(carData),
-    loadSchema: () => () => (
-        CarApi.car.schema().then(
+    create: (carData, token) => create(carData, token),
+    loadSchema: (token) => () => (
+        CarApi(token).car.schema().then(
             schemaCar => dispatch(schemaLoad("cars", schemaCar))
         )
     ),
 }, dispatch)
 
-const mapStateToProps = ({ schemes }) => ({ schemes });
+const mapStateToProps = ({ schemes, user }) => ({ schemes, user });
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateCarPage)

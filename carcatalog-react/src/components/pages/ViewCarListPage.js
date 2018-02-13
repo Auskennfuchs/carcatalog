@@ -70,7 +70,7 @@ class ViewCarListPage extends Component {
     }
 
     searchCars = () => {
-        this.props.fetchCars()
+        this.props.fetchCars(this.props.user.jwt)
             .then(cars => {
                 this.setState({
                     cars: normalize(cars.cars, CarListSchema).entities.cars
@@ -113,5 +113,8 @@ ViewCarListPage.propTypes = {
     fetchCars: PropTypes.func.isRequired
 }
 
+const mapStateToProps = ({ user }) => ({
+    user,
+});
 
-export default connect(null, { fetchCars: fetchAll })(ViewCarListPage)
+export default connect(mapStateToProps, { fetchCars: fetchAll })(ViewCarListPage)

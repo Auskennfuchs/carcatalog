@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Tab } from 'semantic-ui-react'
 
 import Apptemplate from '../apptemplate'
 import { getCar, save } from '../../actions/edit'
@@ -23,7 +24,7 @@ class ViewCarDetailsPage extends Component {
 
     componentDidMount() {
         //        if (!this.props.schemes) {
-        this.props.loadSchema()
+        this.props.loadSchema(this.props.user.jwt)
             .then(carSchema =>
                 this.setState({ schemes: carSchema.schema })
             )
@@ -42,11 +43,14 @@ class ViewCarDetailsPage extends Component {
     }
 
     onSubmit = (carData) => {
-        this.props.saveCar(carData)
+        this.props.saveCar(carData, this.props.user.jwt)
+            .then(car => this.setState({ car }))
             .catch(err => {
                 console.log("error" + err)
             })
     }
+
+    getText = (t) => t
 
     render() {
         const { car, loading, success, errors } = this.state
@@ -58,7 +62,13 @@ class ViewCarDetailsPage extends Component {
                     <div>Loading</div>
                 }
                 {!loading && success &&
-                    <EditCarForm schema={schemes} car={car} submit={this.onSubmit} />
+                    [
+                        <h1>{car.name}</h1>,
+                        <Tab menu={{ secondary: true, pointing: true }} panes={[
+                            { menuItem: this.getText('Daten'), render: () => <EditCarForm schema={schemes} car={car} submit={this.onSubmit} /> },
+                            { menuItem: this.getText('Bilder'), render: () => <Tab.Pane attached={false}>Bilder</Tab.Pane> },
+                        ]} />
+                    ]
                 }
             </Apptemplate>
         )
@@ -81,15 +91,15 @@ ViewCarDetailsPage.propTypes = {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    getCar: id => getCar(id),
-    loadSchema: () => () => (
-        CarApi.car.schema().then(
+    getCar: (id, token) => getCar(id, token),
+    loadSchema: (token) => () => (
+        CarApi(token).car.schema().then(
             schemaCar => dispatch(schemaLoad("cars", schemaCar))
         )
     ),
-    saveCar: (car) => save(car),
+    saveCar: (car, token) => save(car, token),
 }, dispatch)
 
-const mapStateToProps = ({ schemes }) => ({ schemes });
+const mapStateToProps = ({ schemes, user }) => ({ schemes, user });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCarDetailsPage)

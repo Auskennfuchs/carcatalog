@@ -8,6 +8,8 @@ import '../../styles/login.css'
 import LoginForm from '../forms/login'
 import { loggedIn } from '../../actions/login'
 
+import UserAPI from '../../api'
+
 class LoginPage extends Component {
     componentWillMount() {
         if (this.props.isAuthenticated) {
@@ -58,20 +60,19 @@ LoginPage.propTypes = {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    login: (credentials) => {
-        if (credentials.loginId === "123") {
-            return Promise.resolve(dispatch(loggedIn({ name: "icke", email: "hier@da.de" })))
-        }
-        return Promise.reject({
-            global: "credentials invalid"
-        })
-    }
+    login: (credentials) => (
+        UserAPI({}).user.login({ email: credentials.loginId, password: credentials.password })
+            .then(user => {
+                dispatch(loggedIn(user))
+                document.cookie = "jwt=".concat(user.jwt)
+            })
+    )
 })
 
 const mapStateToProps = ({
     user
- }) => ({
-        isAuthenticated: !!user.name,
-    });
+}) => ({
+    isAuthenticated: !!user.name,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

@@ -23,7 +23,7 @@ class LabelDate extends Component {
         } catch (e) {
             target.value = ''
         }
-        if (target.value == "Invalid date") {
+        if (target.value === "Invalid date") {
             target.value = ''
         }
         this.props.onChange(e, target)

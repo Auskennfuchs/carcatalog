@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "dotenv": "^5.0.0",
     "moment": "^2.20.1",
     "node-sass-chokidar": "^0.0.3",
     "normalizr": "^3.2.4",

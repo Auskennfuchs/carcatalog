@@ -15,7 +15,8 @@ router.use((req, res, next) => {
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                res.sendFile(path.join(__dirname, '/../index.html'))
+                console.log("invalid JWT")
+                res.status(400).sendFile(path.join(__dirname, '/../index.html'))
             } else {
                 next()
             }            
@@ -27,6 +28,7 @@ router.use((req, res, next) => {
 
 router.route('/cars')
     .get((req, res) => {
+        console.log(req.headers)
         Car.find((err, cars) => {
             if (err) {
                 res.send(err)

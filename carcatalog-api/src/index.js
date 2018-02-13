@@ -3,6 +3,8 @@ import path from 'path'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import CarRoutes from './routes/car'
 import SchemaRoutes from './routes/schema'
@@ -18,6 +20,8 @@ mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         var app = express()
         app.use(bodyParser.json())
+        app.use(cookieParser())
+        app.use(cors())
         
         app.use('/api', CarRoutes)    
 
@@ -26,7 +30,7 @@ mongoose.connect(process.env.MONGODB_URL)
         app.use('/user', UserRoutes)
 
         app.use('/*', (req, res) => {
-            res.sendFile(path.join(__dirname, 'index.html'))
+            res.status(404).sendFile(path.join(__dirname, 'index.html'))
         })
 
         app.listen(3000, () => console.log('running on localhost:3000'))
