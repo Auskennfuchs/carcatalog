@@ -12,6 +12,7 @@ import CarApi from './../../api'
 import { schemaLoad } from './../../actions/schema'
 
 import EditCarForm from './../forms/editcar'
+import PictureUpload from '../forms/pictureupload'
 
 class ViewCarDetailsPage extends Component {
     state = {
@@ -33,12 +34,22 @@ class ViewCarDetailsPage extends Component {
             })
         //        }
         const { id } = this.props.match.params
-        this.props.getCar(id)
+        this.props.getCar(id, this.props.user.jwt)
             .then(car =>
                 this.setState({ car, loading: false, success: true })
             )
             .catch((err) => {
-                this.setState({ car: {}, loading: false, success: false, errors: err.response.data.errors })
+                console.log(err.response.status)
+                let respObj = {
+                    car: {},
+                    loading: false,
+                    success: false,
+                    errors: err.response.data.errors || {}
+                }
+                if (err.response.status === 401) {
+                    respObj.errors = { global: "Unauthorized" }
+                }
+                this.setState(respObj)
             })
     }
 
@@ -52,6 +63,10 @@ class ViewCarDetailsPage extends Component {
 
     getText = (t) => t
 
+    onSubmitPicture = (pictures) => (
+        CarApi(this.props.user.jwt).car.uploadPictures(this.state.car._id,pictures)
+    )
+
     render() {
         const { car, loading, success, errors } = this.state
         const { schemes } = this.props
@@ -62,13 +77,17 @@ class ViewCarDetailsPage extends Component {
                     <div>Loading</div>
                 }
                 {!loading && success &&
-                    [
-                        <h1>{car.name}</h1>,
+                    <div>
+                        <h1>{car.name}</h1>
                         <Tab menu={{ secondary: true, pointing: true }} panes={[
                             { menuItem: this.getText('Daten'), render: () => <EditCarForm schema={schemes} car={car} submit={this.onSubmit} /> },
-                            { menuItem: this.getText('Bilder'), render: () => <Tab.Pane attached={false}>Bilder</Tab.Pane> },
+                            {
+                                menuItem: this.getText('Bilder'), render: () => <div>
+                                    <PictureUpload onSubmit={this.onSubmitPicture} />
+                                </div>
+                            },
                         ]} />
-                    ]
+                    </div>
                 }
             </Apptemplate>
         )

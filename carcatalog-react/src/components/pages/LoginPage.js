@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
         UserAPI({}).user.login({ email: credentials.loginId, password: credentials.password })
             .then(user => {
                 dispatch(loggedIn(user))
-                document.cookie = "jwt=".concat(user.jwt)
+                document.cookie = "jwt=".concat(user.jwt).concat(";path=/")
             })
     )
 })

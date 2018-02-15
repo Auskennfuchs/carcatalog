@@ -1,4 +1,5 @@
-$primary-font: 'Roboto', sans-serif;
+$primary-font: 'Roboto',
+sans-serif;
 @font-face {
     font-family: 'emoji';
     src: local('Android Emoji'), local('NotoColorEmoji'), local('NotoColorEmoji.ttf'), local('/system/fonts/NotoColorEmoji.ttf'), local('Noto Color Emoji'), local('Android Emoji');
@@ -174,5 +175,93 @@ h6 {
     font-family: 'emoji';
     font-size: 10em;
     padding-top: 0.5em;
+    display: inline-block;
+}
+
+.box {
+    display: block;
+    padding: 10em 3em;
+    &.has-advanced-upload {
+        background-color: white;
+        outline: 2px dashed rgba(34, 36, 38, .15);
+        outline-offset: -10px;
+        .box__dragndrop {
+            display: inline;
+        }
+        .box__icon {
+            width: 100%;
+            height: 80px;
+            fill: #92b0b3;
+            display: block;
+            margin-bottom: 40px;
+            font-size: 8em;
+        }
+    }
+
+    &.is-dragover {
+        background-color: grey;
+    }
+
+    .box__input {
+        text-align: center;
+    }
+
+    .box__file {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+        &+label {
+            max-width: 80%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            display: inline-block;
+            overflow: hidden;
+        }
+    }
+    .box__button {
+        font-weight: 700;
+        color: #e5edf1;
+        background-color: #39bfd3;
+        padding: 8px 16px;
+        margin: 40px auto 0;
+        display: block;
+    }
+    .box__dragndrop,
+    .box__error {
+        display: none;
+    }
+}
+
+.previewImage {
     display:inline-block;
+    width: 10em; 
+    height: 10em;
+    vertical-align: middle;
+    margin: 0.2em;
+    border: 1px solid rgba(34, 36, 38, .15);
+    position: relative;
+    background-color: #fff;
+    border-radius: 0.4rem;
+
+    img {
+        display: inline-block;
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+    }
+
+    button {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 0!important;
+    }
 }

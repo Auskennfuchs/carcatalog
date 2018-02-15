@@ -1,8 +1,12 @@
 import express from 'express'
+import fs from 'fs'
+
 import Car from '../models/car'
 import Engine from '../models/engine'
+import Picture from '../models/picture'
 import jwt from 'jsonwebtoken'
 import path from 'path'
+import multipart from 'connect-multiparty'
 
 var router = express.Router()
 
@@ -16,15 +20,17 @@ router.use((req, res, next) => {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 console.log("invalid JWT")
-                res.status(400).sendFile(path.join(__dirname, '/../index.html'))
+                res.status(401).sendFile(path.join(__dirname, '/../index.html'))
             } else {
                 next()
-            }            
+            }
         })
     } else {
         next()
     }
 })
+
+router.use(multipart())
 
 router.route('/cars')
     .get((req, res) => {
@@ -65,10 +71,37 @@ router.route('/cars/:carId')
             car.save((err, car) => {
                 if (err) {
                     res.status(500).jsonp({ errors: { global: err } })
+                } else {
+                    res.status(200).jsonp(car)
                 }
-                res.status(200).jsonp(car)
             })
         })
+    })
+
+router.route('/cars/:carId/picture')
+    .post((req, res) => {
+        if (req.files.files !== undefined) {
+            if(!Array.isArray(req.files.files)) {
+                req.files.files = [req.files.files]
+            }
+            req.files.files.forEach(picture => {
+                let dbPic = new Picture()
+                dbPic.data = fs.readFileSync(picture.path)
+                dbPic.contentType = picture.type
+                dbPic.save((err, pic) => {
+                    if (err) {
+                        res.status(500).jsonp({ errors: { global: err } }).send()
+                    } else {
+                        res.status(200).jsonp({ pic }).send()
+                    }
+                })
+                fs.unlink(picture.path, err => {
+                    if (err !== null) {
+                        console.log(err)
+                    }
+                })
+            });
+        }
     })
 
 export default router
