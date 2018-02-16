@@ -80,28 +80,42 @@ router.route('/cars/:carId')
 
 router.route('/cars/:carId/picture')
     .post((req, res) => {
-        if (req.files.files !== undefined) {
-            if(!Array.isArray(req.files.files)) {
-                req.files.files = [req.files.files]
+        Car.findById(req.params.carId, (err, car) => {
+            if (err) {
+                res.status(404).jsonp({ errors: { global: err } })
+            } else {
+                if (req.files.files !== undefined) {
+                    if (!Array.isArray(req.files.files)) {
+                        req.files.files = [req.files.files]
+                    }
+                    const promiseList = []
+                    req.files.files.forEach(picture => {
+                        let dbPic = new Picture()
+                        dbPic.data = fs.readFileSync(picture.path)
+                        dbPic.contentType = picture.type
+                        promiseList.push(dbPic.save())
+                        fs.unlink(picture.path, err => {
+                            if (err !== null) {
+                                console.log(err)
+                            }
+                        })
+                    })
+                    Promise.all(promiseList).then(values => {
+                        if (!Array.isArray(car.pictures)) {
+                            car.pictures = []
+                        }
+                        values.forEach(pic => car.pictures.push(pic._id))
+                        car.save((err, c) => {
+                            if (err) {
+                                res.status(500).jsonp({ errors: { global: err } }).send()
+                            } else {
+                                res.status(200).jsonp({ car }).send()
+                            }
+                        })
+                    })
+                }
             }
-            req.files.files.forEach(picture => {
-                let dbPic = new Picture()
-                dbPic.data = fs.readFileSync(picture.path)
-                dbPic.contentType = picture.type
-                dbPic.save((err, pic) => {
-                    if (err) {
-                        res.status(500).jsonp({ errors: { global: err } }).send()
-                    } else {
-                        res.status(200).jsonp({ pic }).send()
-                    }
-                })
-                fs.unlink(picture.path, err => {
-                    if (err !== null) {
-                        console.log(err)
-                    }
-                })
-            });
-        }
+        })
     })
 
 export default router

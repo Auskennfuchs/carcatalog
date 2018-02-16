@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import Engine from './engine'
+import Picture from './picture'
 
 var vehicleTypes = ['car', 'truck']
 var vehicleShapes = ['limousine', 'sedan', 'cabrio', 'pickup', 'van', 'bus']
@@ -47,7 +48,8 @@ var CarSchema = new mongoose.Schema({
         partialCover: { type: Number, fractions: 0 },
     },
     engine: Engine,
-    body: Body
+    body: Body,
+    pictures: [mongoose.Schema.Types.ObjectId],
 })
 
 export default mongoose.model("Car", CarSchema)

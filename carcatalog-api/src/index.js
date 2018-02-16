@@ -18,6 +18,7 @@ mongoose.connect(process.env.MONGODB_URL)
         process.exit(1)
     })
     .then(() => {
+        mongoose.Promise = Promise
         var app = express()
         app.use(bodyParser.json())
         app.use(cookieParser())

@@ -30,7 +30,7 @@ class PreviewImage extends Component {
         return (
             <div className="previewImage">
                 <img src="#" ref={this.handleRef} alt="no preview available" />
-                <Button icon="trash" onClick={this.onDelete} size="mini"/>
+                <Button icon="trash" onClick={this.onDelete} size="mini" />
             </div>
         )
     }
@@ -69,6 +69,9 @@ class PictureUpload extends Component {
 
     submit = (e) => {
         this.props.onSubmit(this.state.previewFiles)
+            .then(() => {
+                this.setState({ previewFiles: [] })
+            })
     }
 
     onChange = (e, target) => {
