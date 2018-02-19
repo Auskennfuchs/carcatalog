@@ -24,9 +24,9 @@ class AppTemplate extends Component {
         const { children } = this.props
         return (
             <div className="mainContent">
-                <Sidebar.Pushable as={Segment}>                
+                <Sidebar.Pushable as={Segment}>
                     <Sidebar as={Menu} visible icon vertical inverted width={this.state.menuSize} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                            <Header />
+                        <Header />
                     </Sidebar>
                     <Sidebar.Pusher>
                         <Segment basic>

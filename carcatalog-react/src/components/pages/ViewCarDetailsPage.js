@@ -14,6 +14,8 @@ import { schemaLoad } from './../../actions/schema'
 import EditCarForm from './../forms/editcar'
 import PictureUpload from '../forms/pictureupload'
 
+import LoadingSpinner from '../elements/loadingspinner'
+
 class ViewCarDetailsPage extends Component {
     state = {
         car: {},
@@ -29,7 +31,7 @@ class ViewCarDetailsPage extends Component {
             .then(carSchema =>
                 this.setState({ schemes: carSchema.schema })
             )
-            .catch(err => {
+            .catch(() => {
                 this.setState({ errors: { global: "error loading schema" } })
             })
         //        }
@@ -39,8 +41,7 @@ class ViewCarDetailsPage extends Component {
                 this.setState({ car, loading: false, success: true })
             )
             .catch((err) => {
-                console.log(err.response.status)
-                let respObj = {
+                const respObj = {
                     car: {},
                     loading: false,
                     success: false,
@@ -57,15 +58,18 @@ class ViewCarDetailsPage extends Component {
         this.props.saveCar(carData, this.props.user.jwt)
             .then(car => this.setState({ car }))
             .catch(err => {
-                console.log("error" + err)
+                console.log("error".concat(err))
             })
     }
 
-    getText = (t) => t
-
     onSubmitPicture = (pictures) => (
-        CarApi(this.props.user.jwt).car.uploadPictures(this.state.car._id,pictures)
+        CarApi(this.props.user.jwt).car.uploadPictures(this.state.car._id, pictures)
+            .then(car => {
+                this.setState({ car: car.car })
+            })
     )
+
+    getText = (t) => t
 
     render() {
         const { car, loading, success, errors } = this.state
@@ -74,7 +78,7 @@ class ViewCarDetailsPage extends Component {
             <Apptemplate>
                 {!!errors.global && errors.global && <PageMessage text={errors.global} />}
                 {loading &&
-                    <div>Loading</div>
+                    <LoadingSpinner />
                 }
                 {!loading && success &&
                     <div>
@@ -83,7 +87,7 @@ class ViewCarDetailsPage extends Component {
                             { menuItem: this.getText('Daten'), render: () => <EditCarForm schema={schemes} car={car} submit={this.onSubmit} /> },
                             {
                                 menuItem: this.getText('Bilder'), render: () => <div>
-                                    <PictureUpload onSubmit={this.onSubmitPicture} />
+                                    <PictureUpload onSubmit={this.onSubmitPicture} pictures={car.pictures} />
                                 </div>
                             },
                         ]} />
@@ -107,6 +111,9 @@ ViewCarDetailsPage.propTypes = {
         schema: PropTypes.array.isRequired,
     }).isRequired,
     saveCar: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+        jwt: PropTypes.string.isRequired
+    }).isRequired
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

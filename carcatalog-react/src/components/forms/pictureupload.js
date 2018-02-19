@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Icon, Button } from 'semantic-ui-react'
+import GridColumn, { Form, Icon, Button, Grid } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 
 class PreviewImage extends Component {
@@ -7,8 +7,18 @@ class PreviewImage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            file: props.file
+            file: props.file,
+            href: '#'
         }
+    }
+
+    componentDidMount() {
+        const reader = new FileReader()
+        const { file } = this.props
+        reader.onload = (e) => {
+            this.setState({ href: e.target.result })
+        }
+        reader.readAsDataURL(file)
     }
 
     handleRef = (c) => {
@@ -20,20 +30,21 @@ class PreviewImage extends Component {
     }
 
     render() {
-        const reader = new FileReader()
-        const $this = this
-        const { file } = this.props
-        reader.onload = (e) => {
-            $this.imgRef.src = e.target.result
-        }
-        reader.readAsDataURL(file)
         return (
             <div className="previewImage">
-                <img src="#" ref={this.handleRef} alt="no preview available" />
+                <img src={this.state.href} ref={this.handleRef} alt="no preview available" />
                 <Button icon="trash" onClick={this.onDelete} size="mini" />
             </div>
         )
     }
+}
+
+const CarPicture = ({ picId }) => (
+    <img src={"http://localhost:3000/picture/".concat(picId)} />
+)
+
+CarPicture.propTypes = {
+    picId: PropTypes.string.isRequired,
 }
 
 PreviewImage.propTypes = {
@@ -137,41 +148,57 @@ class PictureUpload extends Component {
 
     render() {
         const { hasAdvancedUpload, uploading, success, previewFiles, dragOver } = this.state
-        const { accept } = this.props
+        const { accept, pictures } = this.props
         return (
-            <div>
-                <Form encType="multipart/form-data" className={"box"
-                    .concat(hasAdvancedUpload ? " has-advanced-upload" : "")
-                    .concat(dragOver ? " is-dragover" : "")}
-                    onSubmit={this.submit}
-                    onDragEnter={this.onDragEnter} onDragOver={this.onDragEnter}
-                    onDragLeave={this.onDragLeave} onDragEnd={this.onDragLeave}
-                    onDrop={this.onDrop}
-                >
-                    <div className="box__input">
-                        <Icon name="upload" className="box__icon" />
-                        <input type="file" id={this.id} name="files[]" multiple className="box__file" ref={this.handleRef} onChange={this.onChange}
-                            accept={accept} />
-                        <label htmlFor={this.id}><strong>Choose a file</strong><span className="box__dragndrop"> or drag it here</span>.</label>
-                        <Button primary className="box__button">Upload</Button>
-                    </div>
-                    {uploading && <div className="box__uploading">Uploading&hellip;</div>}
-                    {success && <div className="box__success">Done!</div>}
-                    <div className="box__error">Error! <span></span>.</div>
-                </Form>
-                {previewFiles.length > 0 && previewFiles.map(file => <PreviewImage file={file} key={"prevImg".concat(file.name)} onDelete={this.onDeleteFile} />)}
-            </div>
+            <Grid>
+                <Grid.Row>
+                    {pictures.map(pic => <Grid.Column width={2}>
+                        <CarPicture picId={pic} />
+                    </Grid.Column>
+                    )}
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column width={16}>
+                        <Form encType="multipart/form-data" className={"box"
+                            .concat(hasAdvancedUpload ? " has-advanced-upload" : "")
+                            .concat(dragOver ? " is-dragover" : "")}
+                            onSubmit={this.submit}
+                            onDragEnter={this.onDragEnter} onDragOver={this.onDragEnter}
+                            onDragLeave={this.onDragLeave} onDragEnd={this.onDragLeave}
+                            onDrop={this.onDrop}
+                        >
+                            <div className="box__input">
+                                <Icon name="upload" className="box__icon" />
+                                <input type="file" id={this.id} name="files[]" multiple className="box__file" ref={this.handleRef} onChange={this.onChange}
+                                    accept={accept} />
+                                <label htmlFor={this.id}><strong>Choose a file</strong><span className="box__dragndrop"> or drag it here</span>.</label>
+                                <Button primary className="box__button">Upload</Button>
+                            </div>
+                            {uploading && <div className="box__uploading">Uploading&hellip;</div>}
+                            {success && <div className="box__success">Done!</div>}
+                            <div className="box__error">Error! <span></span>.</div>
+                        </Form>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    {previewFiles.length > 0 && previewFiles.map(file => <Grid.Column width={2}>
+                        <PreviewImage file={file} key={"prevImg".concat(file.name)} onDelete={this.onDeleteFile} />
+                    </Grid.Column>)}
+                </Grid.Row>
+            </Grid>
         )
     }
 }
 
 PictureUpload.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    accept: PropTypes.string
+    accept: PropTypes.string,
+    pictures: PropTypes.array
 }
 
 PictureUpload.defaultProps = {
-    accept: '.gif,.jpg,.jpeg,.png'
+    accept: '.gif,.jpg,.jpeg,.png',
+    pictures: []
 }
 
 export default PictureUpload
