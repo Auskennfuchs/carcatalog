@@ -1,60 +1,22 @@
 import React, { Component } from 'react'
-import GridColumn, { Form, Icon, Button, Grid } from 'semantic-ui-react'
+import { Form, Icon, Button, Grid } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
+import Cheerio from 'cheerio'
 
-class PreviewImage extends Component {
+import PreviewImage from './previewimage'
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            file: props.file,
-            href: '#'
-        }
-    }
-
-    componentDidMount() {
-        const reader = new FileReader()
-        const { file } = this.props
-        reader.onload = (e) => {
-            this.setState({ href: e.target.result })
-        }
-        reader.readAsDataURL(file)
-    }
-
-    handleRef = (c) => {
-        this.imgRef = c
-    }
-
-    onDelete = (e) => {
-        this.props.onDelete(this.state.file)
-    }
-
-    render() {
-        return (
-            <div className="previewImage">
-                <img src={this.state.href} ref={this.handleRef} alt="no preview available" />
-                <Button icon="trash" onClick={this.onDelete} size="mini" />
-            </div>
-        )
-    }
-}
 
 const CarPicture = ({ picId }) => (
-    <img src={"http://localhost:3000/picture/".concat(picId)} />
+    <img src={"http://localhost:3000/picture/".concat(picId)} alt="not found" />
 )
 
 CarPicture.propTypes = {
     picId: PropTypes.string.isRequired,
 }
 
-PreviewImage.propTypes = {
-    file: PropTypes.object.isRequired,
-    onDelete: PropTypes.func.isRequired
-}
-
 let lastId = 0
 function newId(prefix = 'id') {
-    lastId++;
+    lastId += 1;
     return `${prefix}${lastId}`;
 }
 
@@ -62,8 +24,10 @@ class PictureUpload extends Component {
 
     constructor(props) {
         super(props)
+        const div = document.createElement('div');
+        const advancedUpload = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window
         this.state = {
-            hasAdvancedUpload: false,
+            hasAdvancedUpload: advancedUpload,
             uploading: false,
             sucess: false,
             previewFiles: [],
@@ -72,26 +36,16 @@ class PictureUpload extends Component {
         this.id = newId('pictureUpload')
     }
 
-    componentDidMount() {
-        const div = document.createElement('div');
-        const advancedUpload = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window
-        this.setState({ hasAdvancedUpload: advancedUpload })
-    }
-
-    submit = (e) => {
+    onSubmit = () => {
         this.props.onSubmit(this.state.previewFiles)
             .then(() => {
                 this.setState({ previewFiles: [] })
             })
     }
 
-    onChange = (e, target) => {
+    onChange = (e) => {
         const { previewFiles } = this.state
         this.setState({ previewFiles: this.addFiles(e.target.files, previewFiles) })
-    }
-
-    handleRef = (c) => {
-        this.inputRef = c
     }
 
     onDragEnter = (e) => {
@@ -110,6 +64,28 @@ class PictureUpload extends Component {
         }
     }
 
+    onDrop = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const { previewFiles } = this.state
+        const files = e.dataTransfer.files
+
+/*        console.log(files)
+
+        test für upload aus anderem tab
+        const data = e.dataTransfer.getData("text/html")
+        const $ = Cheerio.load(data)
+        console.log($('img').attr('src'))*/
+
+        this.setState({ dragOver: false, previewFiles: this.addFiles(files, previewFiles) })
+    }
+
+    onDeleteFile = (file) => {
+        const { previewFiles } = this.state
+        this.setState({ previewFiles: previewFiles.filter(f => f !== file) })
+    }
+
     getFileExtension = (fileName) => {
         const re = /(?:\.([^.]+))?$/;
         const ext = re.exec(fileName)[1]
@@ -119,31 +95,20 @@ class PictureUpload extends Component {
         return undefined
     }
 
+    handleRef = (c) => {
+        this.inputRef = c
+    }
+
     addFiles = (files, fileList) => {
         const acceptedExtensions = this.props.accept.split(',')
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i += 1) {
             const fileExt = this.getFileExtension(files[i].name)
             if (acceptedExtensions.length === 0 || acceptedExtensions.find(ext => ext === fileExt)) {
                 fileList.push(files[i])
             }
         }
         return fileList
-    }
-
-    onDrop = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        let { previewFiles } = this.state
-        const files = e.dataTransfer.files
-
-        this.setState({ dragOver: false, previewFiles: this.addFiles(files, previewFiles) })
-    }
-
-    onDeleteFile = (file) => {
-        const { previewFiles } = this.state
-        this.setState({ previewFiles: previewFiles.filter(f => f !== file) })
     }
 
     render() {
@@ -162,7 +127,7 @@ class PictureUpload extends Component {
                         <Form encType="multipart/form-data" className={"box"
                             .concat(hasAdvancedUpload ? " has-advanced-upload" : "")
                             .concat(dragOver ? " is-dragover" : "")}
-                            onSubmit={this.submit}
+                            onSubmit={this.onSubmit}
                             onDragEnter={this.onDragEnter} onDragOver={this.onDragEnter}
                             onDragLeave={this.onDragLeave} onDragEnd={this.onDragLeave}
                             onDrop={this.onDrop}
@@ -193,7 +158,7 @@ class PictureUpload extends Component {
 PictureUpload.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     accept: PropTypes.string,
-    pictures: PropTypes.array
+    pictures: PropTypes.array,
 }
 
 PictureUpload.defaultProps = {

@@ -12,7 +12,7 @@ import CarApi from './../../api'
 import { schemaLoad } from './../../actions/schema'
 
 import EditCarForm from './../forms/editcar'
-import PictureUpload from '../forms/pictureupload'
+import PictureUpload from '../pictureupload/pictureupload'
 
 import LoadingSpinner from '../elements/loadingspinner'
 
