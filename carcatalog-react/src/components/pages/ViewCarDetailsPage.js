@@ -64,8 +64,15 @@ class ViewCarDetailsPage extends Component {
 
     onSubmitPicture = (pictures) => (
         CarApi(this.props.user.jwt).car.uploadPictures(this.state.car._id, pictures)
-            .then(car => {
-                this.setState({ car: car.car })
+            .then(res => {
+                this.setState({ car: res.car })
+            })
+    )
+
+    onDeletePicture = (picId) => (
+        CarApi(this.props.user.jwt).car.deletePicture(this.state.car._id, picId)
+            .then(res => {
+                this.setState({ car: res.car })
             })
     )
 
@@ -87,7 +94,7 @@ class ViewCarDetailsPage extends Component {
                             { menuItem: this.getText('Daten'), render: () => <EditCarForm schema={schemes} car={car} submit={this.onSubmit} /> },
                             {
                                 menuItem: this.getText('Bilder'), render: () => <div>
-                                    <PictureUpload onSubmit={this.onSubmitPicture} pictures={car.pictures} />
+                                    <PictureUpload onSubmit={this.onSubmitPicture} pictures={car.pictures} onDeletePicture={this.onDeletePicture} />
                                 </div>
                             },
                         ]} />

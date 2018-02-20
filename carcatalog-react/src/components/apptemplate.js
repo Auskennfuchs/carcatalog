@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Menu, Sidebar, Segment } from 'semantic-ui-react'
+import { Menu, Sidebar, Segment, Icon } from 'semantic-ui-react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
 import Header from './header'
 
 class AppTemplate extends Component {
@@ -21,7 +24,19 @@ class AppTemplate extends Component {
     }
 
     render() {
-        const { children } = this.props
+        const { children, user } = this.props
+        /*
+        <Menu inverted>
+                <Menu.Item header>Car Catalog</Menu.Item>
+                <Menu.Item name="Test" />
+                <Menu.Menu position="right" icon="labeled">
+                    <Menu.Item>
+                        <Icon name="user outline" />
+                        {user.name}
+                    </Menu.Item>
+                </Menu.Menu>
+            </Menu>
+            */
         return (
             <div className="mainContent">
                 <Sidebar.Pushable as={Segment}>
@@ -39,4 +54,12 @@ class AppTemplate extends Component {
     }
 }
 
-export default AppTemplate;
+AppTemplate.propTypes = {
+    user: PropTypes.shape({
+        name: PropTypes.string.isRequired
+    }).isRequired
+}
+
+const mapStateToProps = ({ user }) => ({ user })
+
+export default connect(mapStateToProps)(AppTemplate)

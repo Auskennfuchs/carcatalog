@@ -1,18 +1,9 @@
 import React, { Component } from 'react'
 import { Form, Icon, Button, Grid } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
-import Cheerio from 'cheerio'
 
 import PreviewImage from './previewimage'
-
-
-const CarPicture = ({ picId }) => (
-    <img src={"http://localhost:3000/picture/".concat(picId)} alt="not found" />
-)
-
-CarPicture.propTypes = {
-    picId: PropTypes.string.isRequired,
-}
+import CarPicture from './carpicture'
 
 let lastId = 0
 function newId(prefix = 'id') {
@@ -37,10 +28,15 @@ class PictureUpload extends Component {
     }
 
     onSubmit = () => {
+        this.setState({ uploading: true })
         this.props.onSubmit(this.state.previewFiles)
             .then(() => {
-                this.setState({ previewFiles: [] })
+                this.setState({ previewFiles: [], uploading: false })
             })
+    }
+
+    onDeletePic = (picId) => {
+        this.props.onDeletePicture(picId)
     }
 
     onChange = (e) => {
@@ -71,12 +67,13 @@ class PictureUpload extends Component {
         const { previewFiles } = this.state
         const files = e.dataTransfer.files
 
-/*        console.log(files)
-
-        test für upload aus anderem tab
-        const data = e.dataTransfer.getData("text/html")
-        const $ = Cheerio.load(data)
-        console.log($('img').attr('src'))*/
+        /*        console.log(files)
+        
+                test für upload aus anderem tab
+                const data = e.dataTransfer.getData("text/html")
+                const $ = Cheerio.load(data)
+                        console.log($('img').attr('src'))
+                */
 
         this.setState({ dragOver: false, previewFiles: this.addFiles(files, previewFiles) })
     }
@@ -117,8 +114,8 @@ class PictureUpload extends Component {
         return (
             <Grid>
                 <Grid.Row>
-                    {pictures.map(pic => <Grid.Column width={2}>
-                        <CarPicture picId={pic} />
+                    {pictures.map((pic, index) => <Grid.Column width={2}>
+                        <CarPicture picId={pic} key={"carpic".concat(index)} onDelete={this.onDeletePic} />
                     </Grid.Column>
                     )}
                 </Grid.Row>
@@ -141,7 +138,7 @@ class PictureUpload extends Component {
                             </div>
                             {uploading && <div className="box__uploading">Uploading&hellip;</div>}
                             {success && <div className="box__success">Done!</div>}
-                            <div className="box__error">Error! <span></span>.</div>
+                            <div className="box__error">Error!.</div>
                         </Form>
                     </Grid.Column>
                 </Grid.Row>
@@ -157,6 +154,7 @@ class PictureUpload extends Component {
 
 PictureUpload.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onDeletePicture: PropTypes.func.isRequired,
     accept: PropTypes.string,
     pictures: PropTypes.array,
 }

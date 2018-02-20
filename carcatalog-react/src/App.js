@@ -6,7 +6,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { Provider } from 'react-redux'
 
 import CreateCarPage from './components/pages/CreateCarPage'
-import ViewCarListPage from './components/pages/ViewCarListPage'
+import ViewCarListPage from './components/pages/car/ViewCarListPage'
 import LoginPage from './components/pages/LoginPage'
 import ViewCarDetailsPage from './components/pages/ViewCarDetailsPage'
 

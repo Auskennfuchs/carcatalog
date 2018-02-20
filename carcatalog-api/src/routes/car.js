@@ -101,17 +101,17 @@ router.route('/cars/:carId/picture')
                     req.files.files.forEach(picture => {
                         const prom = new Promise((resolve, reject) => {
                             fs.createReadStream(picture.path)
-                            .pipe(bucket.openUploadStream(picture.name, {
-                                contentType: picture.type
-                            }))
-                            .on('finish', file => {
-                                console.log(file)
-                                resolve(file._id)
-                            })
-                            .on('error', err => {
-                                console.log(err)
-                                reject(err)
-                            })
+                                .pipe(bucket.openUploadStream(picture.name, {
+                                    contentType: picture.type
+                                }))
+                                .on('finish', file => {
+                                    console.log(file)
+                                    resolve(file._id)
+                                })
+                                .on('error', err => {
+                                    console.log(err)
+                                    reject(err)
+                                })
                         })
                         promiseList.push(prom)
                     })
@@ -147,6 +147,11 @@ router.route('/cars/:carId/picture/:picId')
                         res.status(200).jsonp({ car: c })
                     }
                 })
+                const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+                    chunkSizeBytes: 1024,
+                    bucketName: "carpics",
+                })
+                bucket.delete(new mongoose.Types.ObjectId(req.params.picId))
             }
         })
     })

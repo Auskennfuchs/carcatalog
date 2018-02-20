@@ -3,9 +3,9 @@ import { Table, Button } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { normalize } from "normalizr"
-import { fetchAll } from '../../actions/edit'
-import { CarListSchema } from '../../model/gridcar'
-import AppTemplate from '../apptemplate'
+import { fetchAll } from '../../../actions/edit'
+import { CarListSchema } from '../../../model/gridcar'
+import AppTemplate from '../../apptemplate'
 
 const get = (p, o) =>
     p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o)

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-
 import { Menu, Icon } from 'semantic-ui-react'
+
 import { loggedOut } from '../actions/login';
 
 class Header extends Component {
@@ -25,7 +25,7 @@ class Header extends Component {
     render() {
         const { activeItem } = this.state;
         return [
-            <Menu.Item onClick={this.onRoute} destination="/cars" active={activeItem === "/cars"} key="car">
+            <Menu.Item onClick={this.onRoute} destination="/cars" active={activeItem.startsWith("/cars")} key="car">
                 <Icon name="car" size="large" />
             </Menu.Item>,
             <Menu.Item onClick={this.onRoute} destination="/cars/create" active={activeItem === "/cars/create"} key="createcar">
