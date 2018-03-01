@@ -1,0 +1,6 @@
+.carousel {
+  list-style-type: none;
+  position: relative; }
+  .carousel li {
+    position: relative;
+    display: none; }

@@ -7,6 +7,10 @@ import Header from './header'
 
 class AppTemplate extends Component {
 
+    static defaultProps = {
+        children: null
+    }
+    
     state = {
         menuSize: 'very thin',
     }
@@ -25,20 +29,19 @@ class AppTemplate extends Component {
 
     render() {
         const { children, user } = this.props
-        /*
-        <Menu inverted>
-                <Menu.Item header>Car Catalog</Menu.Item>
-                <Menu.Item name="Test" />
-                <Menu.Menu position="right" icon="labeled">
-                    <Menu.Item>
-                        <Icon name="user outline" />
-                        {user.name}
-                    </Menu.Item>
-                </Menu.Menu>
-            </Menu>
-            */
+
         return (
             <div className="mainContent">
+                <Menu className="headerMenu">
+                    <Menu.Item header>Car Catalog</Menu.Item>
+                    <Menu.Item name="Test" />
+                    <Menu.Menu position="right" icon="labeled">
+                        <Menu.Item>
+                            {user.name}
+                            <Icon name="user outline" />
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
                 <Sidebar.Pushable as={Segment}>
                     <Sidebar as={Menu} visible icon vertical inverted width={this.state.menuSize} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                         <Header />
@@ -57,7 +60,11 @@ class AppTemplate extends Component {
 AppTemplate.propTypes = {
     user: PropTypes.shape({
         name: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+      ])
 }
 
 const mapStateToProps = ({ user }) => ({ user })

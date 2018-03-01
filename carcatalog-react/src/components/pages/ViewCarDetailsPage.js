@@ -69,12 +69,12 @@ class ViewCarDetailsPage extends Component {
             })
     )
 
-    onDeletePicture = (picId) => (
-        CarApi(this.props.user.jwt).car.deletePicture(this.state.car._id, picId)
+    onDeletePicture = (picId) => {
+        return CarApi(this.props.user.jwt).car.deletePicture(this.state.car._id, picId)
             .then(res => {
                 this.setState({ car: res.car })
             })
-    )
+    }
 
     getText = (t) => t
 

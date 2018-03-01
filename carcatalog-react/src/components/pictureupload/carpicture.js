@@ -4,8 +4,25 @@ import PropTypes from 'prop-types'
 
 class CarPicture extends Component {
 
-    onDelete = () => {
+    static propTypes = {
+        picId: PropTypes.string.isRequired,
+        onDelete: PropTypes.func.isRequired,
+        onMouseDown: PropTypes.func,
+    }
+
+    static defaultProps = {
+        onMouseDown: () => { }
+    }
+
+    onDelete = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
         this.props.onDelete(this.props.picId)
+    }
+
+    onMouseDown = (e) => {
+        e.target = this.imgRef
+        this.props.onMouseDown(e, this.props.picId)
     }
 
     handleRef = (c) => {
@@ -14,18 +31,12 @@ class CarPicture extends Component {
 
     render() {
         return (
-            <div className="previewImage">        
-                <img src={"http://localhost:3000/picture/".concat(this.props.picId)} ref={this.handleRef} alt="no preview available" />
+            <div className="previewImage" onMouseDown={this.onMouseDown} role="presentation" ref={this.handleRef}>
+                <img src={process.env.REACT_APP_URL_PICTUREAPI.concat("/picture/").concat(this.props.picId)} alt="no preview available" />
                 <Button icon="trash" onClick={this.onDelete} size="mini" />
             </div>
         )
     }
 }
-
-CarPicture.propTypes = {
-    picId: PropTypes.string.isRequired,
-    onDelete: PropTypes.func.isRequired
-}
-
 
 export default CarPicture

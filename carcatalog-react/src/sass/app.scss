@@ -1,10 +1,15 @@
 @import "loadingspinner.scss";
-
+@import "carousel.scss";
 $primary-font: 'Roboto',
 sans-serif;
 @font-face {
     font-family: 'emoji';
     src: local('Android Emoji'), local('NotoColorEmoji'), local('NotoColorEmoji.ttf'), local('/system/fonts/NotoColorEmoji.ttf'), local('Noto Color Emoji'), local('Android Emoji');
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }
 
 #root,
@@ -200,15 +205,12 @@ h6 {
             font-size: 8em;
         }
     }
-
     &.is-dragover {
         background-color: grey;
     }
-
     .box__input {
         text-align: center;
     }
-
     .box__file {
         width: 0.1px;
         height: 0.1px;
@@ -240,31 +242,58 @@ h6 {
 }
 
 .previewImage {
-    display:inline-block;
-    width: 100%; 
-    height: 10em;
+    display: inline-block;
+    width: 100%;
+    min-width: 10em;
     vertical-align: middle;
     margin: 0.2em;
     border: 1px solid rgba(34, 36, 38, .15);
     position: relative;
     background-color: #fff;
     border-radius: 0.4rem;
-
+    padding: 0.5em;
     img {
-        display: inline-block;
+        display: block;
         width: 100%;
         height: auto;
-        position: absolute;
-        top: 0;
-        bottom: 0;
+        position: relative;
         margin: auto;
     }
-
     button {
         display: inline-block;
         position: absolute;
         right: 0;
         top: 0;
         margin: 0!important;
+    }
+}
+
+.reorder {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    li {
+        display: inline-block;
+        padding: 0.3rem;
+        width: 12.5%;
+        min-width: 10em;
+    }
+    .previewImage {
+        cursor: move;
+        img {
+            position: relative;
+        }
+    }
+}
+
+li.placeholder {
+    list-style-type: none;
+
+    .previewImage {
+        img {
+            position: relative;
+        }
     }
 }

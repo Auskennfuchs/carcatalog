@@ -49,7 +49,6 @@ UserSchema.methods.toAuthJSON = function () {
     }
 }
 
-
 UserSchema.plugin(uniqueValidator, { message: "User already exists" })
 
 export default mongoose.model("User", UserSchema)
