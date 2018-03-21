@@ -1,7 +1,10 @@
 @import "loadingspinner.scss";
 @import "carousel.scss";
-$primary-font: 'Roboto',
-sans-serif;
+$primary-font: 'Roboto', sans-serif;
+$sidemenu-width: 4rem;
+$header-height: 5rem;
+$footer-height: 3rem;
+
 @font-face {
     font-family: 'emoji';
     src: local('Android Emoji'), local('NotoColorEmoji'), local('NotoColorEmoji.ttf'), local('/system/fonts/NotoColorEmoji.ttf'), local('Noto Color Emoji'), local('Android Emoji');
@@ -45,12 +48,54 @@ h6 {
 }
 
 .mainContent {
-    display: block;
-    padding: 0;
+    display: grid;
+    grid-template-rows: $header-height auto $footer-height;
+    grid-template-columns: $sidemenu-width auto;
+    grid-template-areas: "side header" "side ." "side footer";
+    align-items: stretch;
     color: #665f5f;
     height: 100%;
     width: 100%;
 }
+
+.sidemenu {
+    grid-area: side;
+    display: grid;
+    grid-template-rows: $header-height auto $footer-height;
+
+    &.ui.menu {
+        margin: 0;
+        border: 0 none;
+        border-radius: 0;
+        background-color: #2f323a;
+    }
+
+    &.ui.vertical.menu .item {
+        &.active {
+            color: #fff;
+            background-color: #5093e1;
+            border-radius: 0;
+        }
+    }
+
+    &.ui.icon.menu .item {
+        color: #a0a5b6;
+        &:hover {
+            color: #fff;
+        }
+    }
+}
+
+.header {
+    grid-area: header;
+    background-color: #fff;
+}
+
+.content {
+    box-sizing: border-box;
+    padding: 0 1.5em;
+}
+
 
 .labelText {
     font-family: $primary-font;

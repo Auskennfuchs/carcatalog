@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Input } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import 'moment/locale/de'
 
 class LabelNumber extends Component {
@@ -22,19 +21,10 @@ class LabelNumber extends Component {
         }
     }
 
-    parseLocaleNumber = (stringNumber) => {
-        const { thousandSeparator, decimalSeparator } = this.state
-        const parsedNumber = parseFloat(stringNumber
-            .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
-            .replace(new RegExp('\\' + decimalSeparator), '.')
-        )
-
-        if (isNaN(parsedNumber)) {
-            return ''
-        }
-        return parsedNumber
+    componentWillUpdate(nextProps) {
+        this.state.numberValue = nextProps.value !== '' ? this.state.formatter.format(nextProps.value) : ''
     }
-
+   
     onChangeValue = (e, target) => {
         const targetValue = this.parseLocaleNumber(target.value)
         this.setState({
@@ -51,7 +41,7 @@ class LabelNumber extends Component {
         this.props.onChange(e, e.target)
     }
 
-    onKeyPress = (e, target) => {
+    onKeyPress = (e) => {
         const keyCode = e.which || e.keyCode
         if ([46, 8, 9, 27, 13].find(code => keyCode === code) ||
             // Allow: Ctrl/cmd+A
@@ -72,6 +62,19 @@ class LabelNumber extends Component {
         }
     }
 
+    parseLocaleNumber = (stringNumber) => {
+        const { thousandSeparator, decimalSeparator } = this.state
+        const parsedNumber = parseFloat(stringNumber
+            .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
+            .replace(new RegExp('\\' + decimalSeparator), '.')
+        )
+
+        if (isNaN(parsedNumber)) {
+            return ''
+        }
+        return parsedNumber
+    }
+
     render() {
         const { label, name, unit } = this.props
         const { numberValue } = this.state
@@ -79,7 +82,6 @@ class LabelNumber extends Component {
         if (unit !== null) {
             labelPosition = "right"
         }
-
         return (
             <div className="labelText">
                 <span className="label">{label}</span>
@@ -92,11 +94,11 @@ class LabelNumber extends Component {
 
 LabelNumber.propTypes = {
     label: PropTypes.string,
-    value: PropTypes.any,
+    value: PropTypes.oneOfType([PropTypes.number,PropTypes.string]),
     fraction: PropTypes.number,
     onChange: PropTypes.func,
     name: PropTypes.string.isRequired,
-    unit: PropTypes.object
+    unit: PropTypes.node
 }
 
 LabelNumber.defaultProps = {
@@ -107,6 +109,4 @@ LabelNumber.defaultProps = {
     onChange: () => { },
 }
 
-const mapStateToProps = ({ value }) => ({ numberValue: value });
-
-export default connect(null, mapStateToProps)(LabelNumber)
+export default LabelNumber

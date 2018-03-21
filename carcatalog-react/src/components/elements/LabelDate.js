@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Input, Button } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import Moment from 'moment'
-import { connect } from 'react-redux'
 import 'moment/locale/de'
 
 class LabelDate extends Component {
@@ -13,6 +12,10 @@ class LabelDate extends Component {
             dateValue: props.value !== null ? Moment(props.value).format("L") : ''
         }
     }
+
+    componentWillUpdate(nextProps) {
+        this.state.dateValue = nextProps.value !== '' ? Moment(nextProps.value).format("L") : ''
+    } 
 
     onChangeValue = (e, target) => {
         this.setState({
@@ -55,6 +58,4 @@ LabelDate.defaultProps = {
     onChange: () => { },
 }
 
-const mapStateToProps = ({ value }) => ({ dateValue: value });
-
-export default connect(null, mapStateToProps)(LabelDate)
+export default LabelDate

@@ -143,11 +143,40 @@ h6 {
   display: table-row; }
 
 .mainContent {
-  display: block;
-  padding: 0;
+  display: grid;
+  grid-template-rows: 5rem auto 3rem;
+  grid-template-columns: 4rem auto;
+  grid-template-areas: "side header" "side ." "side footer";
+  align-items: stretch;
   color: #665f5f;
   height: 100%;
   width: 100%; }
+
+.sidemenu {
+  grid-area: side;
+  display: grid;
+  grid-template-rows: 5rem auto 3rem; }
+  .sidemenu.ui.menu {
+    margin: 0;
+    border: 0 none;
+    border-radius: 0;
+    background-color: #2f323a; }
+  .sidemenu.ui.vertical.menu .item.active {
+    color: #fff;
+    background-color: #5093e1;
+    border-radius: 0; }
+  .sidemenu.ui.icon.menu .item {
+    color: #a0a5b6; }
+    .sidemenu.ui.icon.menu .item:hover {
+      color: #fff; }
+
+.header {
+  grid-area: header;
+  background-color: #fff; }
+
+.content {
+  box-sizing: border-box;
+  padding: 0 1.5em; }
 
 .labelText {
   font-family: "Roboto", sans-serif; }

@@ -10,7 +10,7 @@ class AppTemplate extends Component {
     static defaultProps = {
         children: null
     }
-    
+
     state = {
         menuSize: 'very thin',
     }
@@ -32,7 +32,7 @@ class AppTemplate extends Component {
 
         return (
             <div className="mainContent">
-                <Menu className="headerMenu">
+                <Menu className="header">
                     <Menu.Item header>Car Catalog</Menu.Item>
                     <Menu.Item name="Test" />
                     <Menu.Menu position="right" icon="labeled">
@@ -42,16 +42,12 @@ class AppTemplate extends Component {
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
-                <Sidebar.Pushable as={Segment}>
-                    <Sidebar as={Menu} visible icon vertical inverted width={this.state.menuSize} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                        <Header />
-                    </Sidebar>
-                    <Sidebar.Pusher>
-                        <Segment basic>
-                            {children}
-                        </Segment>
-                    </Sidebar.Pusher>
-                </Sidebar.Pushable>
+                <Menu className="sidemenu" icon vertical>
+                    <Header />
+                </Menu>
+                <div className="content">
+                    {children}
+                </div>
             </div >
         );
     }
@@ -64,7 +60,7 @@ AppTemplate.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
-      ])
+    ])
 }
 
 const mapStateToProps = ({ user }) => ({ user })

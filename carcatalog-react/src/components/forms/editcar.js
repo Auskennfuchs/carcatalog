@@ -14,8 +14,37 @@ class EditCarForm extends Component {
     }
 
     onChange = (e, target) => {
-        const car = { ...this.state.car }
         const parts = target.name.split('.')
+        let fieldName = ""
+        for (let i = 0; i < parts.length; i += 1) {
+            fieldName = fieldName.concat(parts[i].charAt(0).toUpperCase() + parts[i].slice(1))
+        }
+        if (this.hasOwnProperty("onChange".concat(fieldName))) {
+            this["onChange".concat(fieldName)](e, target)
+        }
+        this._updateStateCar(target.name, target.value)
+    }
+
+    onSubmit = () => {
+        this.props.submit(this.state.car)
+    }
+
+    onChangeEnginePowerPs = (e, target) => {
+        const newPS = target.value
+        const newKw = Math.round(newPS * 0.735499)
+
+        this._updateStateCar("engine.power.kw", newKw)
+    }
+    onChangeEnginePowerKw = (e, target) => {
+        const newKw = target.value
+        const newPS = Math.round(newKw * 1.35962)
+
+        this._updateStateCar("engine.power.ps", newPS)
+    }
+
+    _updateStateCar = (fieldName, value) => {
+        const car = { ...this.state.car }
+        const parts = fieldName.split('.')
         let schemaPointer = car
         for (let i = 0; i < parts.length - 1; i += 1) {
             const elem = parts[i]
@@ -24,33 +53,11 @@ class EditCarForm extends Component {
             }
             schemaPointer = schemaPointer[elem]
         }
-        schemaPointer[parts[parts.length - 1]] = target.value
+        schemaPointer[parts[parts.length - 1]] = value
         this.setState({
             car
         })
     }
-
-    onSubmit = () => {
-        this.props.submit(this.state.car)
-    }
-
-    /*    onChangePS = (e) => {
-            const newPS = e.target.value
-            const newKw = Math.round(newPS * 0.735499)
-    
-            this.setState({
-                data: { ...this.state.data, powerKW: newKw, powerPS: newPS }
-            })
-        }
-        onChangeKW = (e) => {
-            const newKw = e.target.value
-            const newPS = Math.round(newKw * 1.35962)
-    
-            this.setState({
-                data: { ...this.state.data, powerKW: newKw, powerPS: newPS }
-            })
-        }
-    */
 
     render() {
         const { car } = this.state
